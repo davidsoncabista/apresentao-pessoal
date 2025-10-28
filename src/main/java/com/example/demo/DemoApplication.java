@@ -20,25 +20,35 @@ class ProfileController {
 
     @GetMapping("/profile")
     public Profile getProfile() {
-        return new Profile("Davidson Conceição", "Arquiteto de Soluções de Infraestrutura / Desenvolvedor Full-Stack", "Apaixonado por construir sistemas sólidos e eficientes.");
+        return new Profile("Davidson Conceição", 
+                           "Arquiteto de Soluções de Infraestrutura / Desenvolvedor Full-Stack", 
+                           "Apaixonado por construir sistemas sólidos e eficientes.",
+                           "https://www.linkedin.com/in/davidson-conceicao/",
+                           "https://github.com/davidsonconceicao",
+                           "https://www.youtube.com/channel/UC-bML-0-T4-ST-I-3_D0_AQ");
     }
 
     @GetMapping("/skills")
     public List<Skill> getSkills() {
         return Arrays.asList(
-            new Skill("Java", "Expert"),
-            new Skill("Spring Boot", "Expert"),
-            new Skill("Docker", "Proficient"),
-            new Skill("Kubernetes", "Proficient"),
-            new Skill("AWS", "Proficient"),
-            new Skill("React", "Intermediate")
+            new Skill("Java", 100, "Backend"),
+            new Skill("Spring Boot", 95, "Backend"),
+            new Skill("Docker", 90, "DevOps"),
+            new Skill("Kubernetes", 85, "DevOps"),
+            new Skill("AWS", 80, "Cloud"),
+            new Skill("React", 75, "Frontend")
         );
     }
 
     @GetMapping("/projects")
     public List<Project> getProjects() {
         return Arrays.asList(
-            new Project("InfraCenter Manager", "Plataforma para gerenciamento de infraestrutura de TI.")
+            new Project("InfraCenter Manager", 
+                        "Plataforma para gerenciamento de infraestrutura de TI.",
+                        "https://github.com/davidsonconceicao/infracenter-manager",
+                        "https://demo.infracenter.com",
+                        "Em desenvolvimento",
+                        Arrays.asList("Java", "Spring Boot", "React", "Docker"))
         );
     }
 }
@@ -47,11 +57,17 @@ class Profile {
     private String name;
     private String title;
     private String summary;
+    private String linkedinUrl;
+    private String githubUrl;
+    private String youtubeUrl;
 
-    public Profile(String name, String title, String summary) {
+    public Profile(String name, String title, String summary, String linkedinUrl, String githubUrl, String youtubeUrl) {
         this.name = name;
         this.title = title;
         this.summary = summary;
+        this.linkedinUrl = linkedinUrl;
+        this.githubUrl = githubUrl;
+        this.youtubeUrl = youtubeUrl;
     }
 
     // Getters
@@ -66,15 +82,29 @@ class Profile {
     public String getSummary() {
         return summary;
     }
+
+    public String getLinkedinUrl() {
+        return linkedinUrl;
+    }
+
+    public String getGithubUrl() {
+        return githubUrl;
+    }
+
+    public String getYoutubeUrl() {
+        return youtubeUrl;
+    }
 }
 
 class Skill {
     private String name;
-    private String level;
+    private Integer proficiency;
+    private String category;
 
-    public Skill(String name, String level) {
+    public Skill(String name, Integer proficiency, String category) {
         this.name = name;
-        this.level = level;
+        this.proficiency = proficiency;
+        this.category = category;
     }
 
     // Getters
@@ -82,18 +112,31 @@ class Skill {
         return name;
     }
 
-    public String getLevel() {
-        return level;
+    public Integer getProficiency() {
+        return proficiency;
+    }
+    
+    public String getCategory() {
+        return category;
     }
 }
 
 class Project {
     private String name;
     private String description;
+    private String githubUrl;
+    private String demoUrl;
+    private String status;
+    private List<String> technologies;
 
-    public Project(String name, String description) {
+
+    public Project(String name, String description, String githubUrl, String demoUrl, String status, List<String> technologies) {
         this.name = name;
         this.description = description;
+        this.githubUrl = githubUrl;
+        this.demoUrl = demoUrl;
+        this.status = status;
+        this.technologies = technologies;
     }
 
     // Getters
@@ -103,5 +146,21 @@ class Project {
 
     public String getDescription() {
         return description;
+    }
+    
+    public String getGithubUrl() {
+        return githubUrl;
+    }
+
+    public String getDemoUrl() {
+        return demoUrl;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public List<String> getTechnologies() {
+        return technologies;
     }
 }
