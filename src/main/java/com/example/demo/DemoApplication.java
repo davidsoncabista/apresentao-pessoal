@@ -20,35 +20,42 @@ class ProfileController {
 
     @GetMapping("/profile")
     public Profile getProfile() {
-        return new Profile("Davidson Conceição", 
+        return new Profile("Davidson Santos Conceição", 
                            "Arquiteto de Soluções de Infraestrutura / Desenvolvedor Full-Stack", 
-                           "Apaixonado por construir sistemas sólidos e eficientes.",
-                           "https://www.linkedin.com/in/davidson-conceicao/",
-                           "https://github.com/davidsonconceicao",
-                           "https://www.youtube.com/channel/UC-bML-0-T4-ST-I-3_D0_AQ");
+                           "Minha filosofia é construir soluções robustas, não o próximo problema. Foco na união de Full-Stack e Infraestrutura Crítica.",
+                           "https://www.linkedin.com/in/davidsonsconceicao/",
+                           "https://github.com/davidsoncabista",
+                           "https://www.youtube.com/@davidson.developer");
     }
 
     @GetMapping("/skills")
     public List<Skill> getSkills() {
         return Arrays.asList(
-            new Skill("Java", 100, "Backend"),
-            new Skill("Spring Boot", 95, "Backend"),
-            new Skill("Docker", 90, "DevOps"),
-            new Skill("Kubernetes", 85, "DevOps"),
-            new Skill("AWS", 80, "Cloud"),
-            new Skill("React", 75, "Frontend")
+            new Skill("Proxmox HA", 95, "Infraestrutura Crítica"),
+            new Skill("Storage SAN", 90, "Infraestrutura Crítica"),
+            new Skill("Terraform", 85, "Infraestrutura Crítica"),
+            new Skill("Node.js / Express", 90, "Desenvolvimento Full-Stack"),
+            new Skill("React / Next.js", 90, "Desenvolvimento Full-Stack"),
+            new Skill("Python", 85, "Desenvolvimento Full-Stack"),
+            new Skill("Roteamento/Switching (Cisco Nexus)", 85, "Telecomunicações")
         );
     }
 
     @GetMapping("/projects")
     public List<Project> getProjects() {
         return Arrays.asList(
-            new Project("InfraCenter Manager", 
-                        "Plataforma para gerenciamento de infraestrutura de TI.",
-                        "https://github.com/davidsonconceicao/infracenter-manager",
-                        "https://demo.infracenter.com",
-                        "Em desenvolvimento",
-                        Arrays.asList("Java", "Spring Boot", "React", "Docker"))
+            new Project("Gerenciador InfraCenter", 
+                        "Plataforma O&M para Data Center, evoluída de PoC para cluster Proxmox HA/SAN/Cisco Nexus.",
+                        "https://github.com/davidsoncabista/InfraCenter",
+                        "#",
+                        "Em Produção (Nuvem Privada)",
+                        Arrays.asList("Proxmox", "Node.js", "React", "HP SAN", "Cisco Nexus")),
+            new Project("Sistema de Gestão (Dungeon App)", 
+                        "Plataforma full-stack para gestão de membros, reservas e pagamentos de associação.",
+                        "https://github.com/davidsoncabista/Dungeon-App/",
+                        "#",
+                        "Ativo / Lançado",
+                        Arrays.asList("Next.js", "TypeScript", "Firebase", "Stripe"))
         );
     }
 }
