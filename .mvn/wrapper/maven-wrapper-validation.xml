@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wrapper-validation-rules>
+    <rule>
+        <id>apache-maven-wrapper</id>
+        <name>Apache Maven Wrapper</name>
+        <description>The version of Maven used by the wrapper</description>
+        <match>
+            <location>/.mvn/wrapper/maven-wrapper.properties</location>
+            <property-name>distributionUrl</property-name>
+            <property-value-pattern>^https\\://repo\\.maven\\.apache\\.org/maven2/org/apache/maven/apache-maven/[^/]+/apache-maven-[^/]+-bin\\.zip$</property-value-pattern>
+        </match>
+    </rule>
+</wrapper-validation-rules>
