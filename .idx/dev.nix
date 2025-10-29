@@ -5,7 +5,7 @@
   channel = "stable-23.11"; # or "unstable"
   # Use https://search.nixos.org/packages to find packages
   packages = [
-    pkgs.zulu17
+    pkgs.jdk17  # Changed from zulu17 to jdk17 for better compatibility
     pkgs.maven
   ];
   # Sets environment variables in the workspace
