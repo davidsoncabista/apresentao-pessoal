@@ -1,10 +1,17 @@
-services:
-  - type: web
-    name: app-portfolio
-    env: docker
-    plan: free
-    healthCheck:
-      path: /actuator/health
-    envVars:
-      - key: SERVER_PORT
-        value: 8080
+# Exported from Render on 2025-10-29T18:24:13Z
+version: "1"
+projects:
+- name: My project
+  environments:
+  - name: Production
+    services:
+    - type: web
+      name: davidson-portfolio-api
+      runtime: docker
+      repo: https://github.com/davidsoncabista/apresentao-pessoal
+      plan: free
+      region: ohio
+      healthCheckPath: /profile
+      dockerContext: .
+      dockerfilePath: ./Dockerfile
+      autoDeployTrigger: commit
