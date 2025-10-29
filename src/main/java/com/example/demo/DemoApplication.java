@@ -37,12 +37,15 @@ class ProfileController {
     @GetMapping("/skills")
     public List<Skill> getSkills() {
         return Arrays.asList(
+            new Skill("Java", 60, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/java/007396/FFFFFF"),
+            new Skill("Docker", 80, "Infraestrutura Crítica", "https://cdn.simpleicons.org/docker/2496ED/FFFFFF"),
+            new Skill("HTML5", 80, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/html5/E34F26/FFFFFF"),
             new Skill("Proxmox HA", 95, "Infraestrutura Crítica", "https://cdn.simpleicons.org/proxmox/E53B00/FFFFFF"),
-            new Skill("Storage SAN", 90, "Infraestrutura Crítica", "https://img.icons8.com/ios-filled/50/FFFFFF/storage-area-network.png"),
-            new Skill("Terraform", 85, "Infraestrutura Crítica", "https://cdn.simpleicons.org/terraform/7B42BC/FFFFFF"),
+            new Skill("Storage SAN", 80, "Infraestrutura Crítica", "https://img.icons8.com/ios-filled/50/FFFFFF/storage-area-network.png"),
+            new Skill("Terraform", 70, "Infraestrutura Crítica", "https://cdn.simpleicons.org/terraform/7B42BC/FFFFFF"),
             new Skill("Node.js / Express", 90, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nodedotjs/339933/FFFFFF"),
             new Skill("React / Next.js", 90, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nextdotjs/000000/FFFFFF"),
-            new Skill("Python", 85, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/python/3776AB/FFFFFF"),
+            new Skill("Python", 60, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/python/3776AB/FFFFFF"),
             new Skill("Roteamento/Switching (Cisco Nexus)", 85, "Telecomunicações", "https://cdn.simpleicons.org/cisco/1BA0D7/FFFFFF")
         );
     }
