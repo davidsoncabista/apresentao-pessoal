@@ -21,9 +21,20 @@
       onCreate = {
         install = "mvn clean install";
       };
-      # Runs when a workspace is (re)started
-      onStart = {
-        run-server = "mvn spring-boot:run";
+      # The onStart command is removed as previews will handle the server start.
+    };
+    previews = {
+      enable = true;
+      previews = {
+        # Name of the preview
+        api = {
+          # Command to start the Spring Boot server
+          command = ["mvn", "spring-boot:run", "-Dserver.port=$PORT"];
+          # Use "web" manager for HTTP services
+          manager = "web";
+          # The internal port to be mapped for the public preview
+          port = 8080;
+        };
       };
     };
   };
