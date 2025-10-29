@@ -40,8 +40,8 @@ Esta API expõe os seguintes endpoints REST para consulta dos dados do meu perfi
 | Endpoint | Método | Descrição | Modelo de Resposta |
 | :--- | :--- | :--- | :--- |
 | `/profile` | `GET` | Retorna o nome, título, resumo e links sociais do autor. | `Profile` |
-| `/skills` | `GET` | Retorna a lista de habilidades, incluindo categoria e nível de proficiência. | `List<Skill>` |
-| `/projects` | `GET` | Retorna a lista de projetos, incluindo descrição, status e tecnologias. | `List<Project>` |
+| `/skills` | `GET` | Retorna a lista de habilidades, incluindo categoria, nível de proficiência e logo. | `List<Skill>` |
+| `/projects` | `GET` | Retorna a lista de projetos, incluindo título, descrição, status e tecnologias. | `List<Project>` |
 
 ---
 
@@ -85,6 +85,7 @@ docker run -p 8080:8080 davidson-portfolio-api
 A página de status estará disponível em `http://localhost:8080/`, com os endpoints da API nos seus respectivos caminhos.
 
 ## 📬 Contato
+
 Conecte-se comigo e explore minha experiência em Arquitetura de Soluções e Infraestrutura Crítica:
 
 **LinkedIn:** https://www.linkedin.com/in/davidsonsconceicao/
