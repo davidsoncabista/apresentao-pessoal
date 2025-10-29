@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Portfolio - Davidson</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>API do Portfólio de Davidson</h1>
+            <p class="status"><span></span>Online</p>
+        </header>
+        <main>
+            <section class="about">
+                <h2>Sobre esta API</h2>
+                <p>Esta é uma API RESTful construída com Spring Boot, projetada para servir os dados do meu portfólio profissional. Ela fornece informações sobre meu perfil, habilidades e projetos de forma estruturada (JSON).</p>
+            </section>
+            <section class="endpoints">
+                <h2>Endpoints Disponíveis</h2>
+                <p>Para interagir com a API, utilize os seguintes endpoints:</p>
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <a href="/profile" target="_blank">/profile</a>
+                    <p>Retorna um objeto JSON com informações do meu perfil profissional, incluindo links para LinkedIn e GitHub.</p>
+                </div>
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <a href="/skills" target="_blank">/skills</a>
+                    <p>Retorna uma lista das minhas habilidades técnicas, classificadas por categoria e nível de proficiência.</p>
+                </div>
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <a href="/projects" target="_blank">/projects</a>
+                    <p>Retorna uma lista dos principais projetos em que trabalhei, com descrições, status e tecnologias utilizadas.</p>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <p>Desenvolvido com ❤️ por Davidson Santos Conceição.</p>
+        </footer>
+    </div>
+</body>
+</html>

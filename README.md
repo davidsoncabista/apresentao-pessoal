@@ -11,9 +11,15 @@ O objetivo é demonstrar a proficiência no desenvolvimento de APIs robustas e e
 
 ### 🎯 Proposta de Valor
 
-O código serve como uma prova de conceito de como meus dados de portfólio (perfil, habilidades e projetos) são modelados e expostos através de endpoints REST, simulando a base de dados que alimentaria a aplicação web.
+O código serve como uma prova de conceito de como meus dados de portfólio (perfil, habilidades e projetos) são modelados e expostos através de endpoints REST, simulando a base de dados que alimentaria la aplicação web.
 
 * **Lema:** "Construir soluções robustas, não o próximo problema."
+
+---
+
+## 🌐 Página de Status da API
+
+Ao acessar a URL raiz da aplicação (ex: `http://localhost:8080/`), você encontrará uma página de status visual. Esta página serve como uma "porta de entrada" para a API, confirmando que o serviço está online e listando todos os endpoints disponíveis para interação.
 
 ---
 
@@ -44,8 +50,8 @@ Esta API expõe os seguintes endpoints REST para consulta dos dados do meu perfi
 Este projeto demonstra as seguintes competências técnicas:
 
 1.  **Desenvolvimento Backend:** Modelagem de dados e exposição de recursos via RESTful Web Services usando Spring Boot.
-2.  **Containerização:** Definição de `Dockerfile` e `docker-compose.yml` para ambientes de desenvolvimento e produção.
-3.  **Ambiente de Desenvolvimento:** Configuração de ambiente (`dev.nix`) para garantir dependências de Java e Maven em qualquer workspace.
+2.  **Containerização:** Definição de `Dockerfile` para ambientes de produção.
+3.  **Frontend Simples:** Servir uma página de status estática (`index.html`) com Spring Boot.
 
 ---
 
@@ -64,16 +70,19 @@ mvn clean install
 # Executa a aplicação Spring Boot
 mvn spring-boot:run
 ```
-A aplicação estará disponível em http://localhost:8080/ (ou na porta 3000 se você estiver usando o ambiente IDX).
+A página de status da API estará disponível em `http://localhost:8080/`. Os endpoints da API podem ser acessados a partir dessa base (ex: `http://localhost:8080/profile`).
 
 ### 2. Execução via Docker (Containerização)
-Use o docker-compose para construir a imagem e iniciar o container:
+Use o Docker para construir a imagem e iniciar o container:
 
 ```bash
-# Constrói a imagem e sobe o serviço em segundo plano
-docker-compose up --build -d
+# Constrói a imagem Docker a partir do Dockerfile
+docker build -t davidson-portfolio-api .
+
+# Executa o container
+docker run -p 8080:8080 davidson-portfolio-api
 ```
-A API estará disponível em http://localhost:8080/profile.
+A página de status estará disponível em `http://localhost:8080/`, com os endpoints da API nos seus respectivos caminhos.
 
 ## 📬 Contato
 Conecte-se comigo e explore minha experiência em Arquitetura de Soluções e Infraestrutura Crítica:
