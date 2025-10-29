@@ -50,6 +50,12 @@ class ProfileController {
     @GetMapping("/projects")
     public List<Project> getProjects() {
         return Arrays.asList(
+            new Project("API de Portfólio em Java",
+                        "API RESTful em Spring Boot que serve como backend headless para este portfólio.",
+                        "https://github.com/davidsoncabista/apresentao-pessoal.git",
+                        "https://davidson-portfolio-api.onrender.com/",
+                        "Em Produção",
+                        Arrays.asList("Java", "Spring Boot", "Maven", "Docker", "H2")),
             new Project("InfraVision",
                         "Plataforma O&M para Data Center, evoluída de PoC para cluster Proxmox HA/SAN/Cisco Nexus.",
                         "https://github.com/davidsoncabista/InfraCenter",
