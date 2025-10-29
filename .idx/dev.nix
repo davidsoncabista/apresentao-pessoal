@@ -13,7 +13,7 @@
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
-      "vscjava.vscode-java-pack",
+      "vscjava.vscode-java-pack"
       "google.gemini-cli-vscode-ide-companion"
     ];
     workspace = {

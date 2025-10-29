@@ -26,8 +26,8 @@ class ProfileController {
 
     @GetMapping("/profile")
     public Profile getProfile() {
-        return new Profile("Davidson Santos Conceição", 
-                           "Arquiteto de Soluções de Infraestrutura / Desenvolvedor Full-Stack", 
+        return new Profile("Davidson Santos Conceição",
+                           "Arquiteto de Soluções de Infraestrutura / Desenvolvedor Full-Stack",
                            "Minha filosofia é construir soluções robustas, não o próximo problema. Foco na união de Full-Stack e Infraestrutura Crítica.",
                            "https://www.linkedin.com/in/davidsonsconceicao/",
                            "https://github.com/davidsoncabista",
@@ -37,29 +37,29 @@ class ProfileController {
     @GetMapping("/skills")
     public List<Skill> getSkills() {
         return Arrays.asList(
-            new Skill("Proxmox HA", 95, "Infraestrutura Crítica"),
-            new Skill("Storage SAN", 90, "Infraestrutura Crítica"),
-            new Skill("Terraform", 85, "Infraestrutura Crítica"),
-            new Skill("Node.js / Express", 90, "Desenvolvimento Full-Stack"),
-            new Skill("React / Next.js", 90, "Desenvolvimento Full-Stack"),
-            new Skill("Python", 85, "Desenvolvimento Full-Stack"),
-            new Skill("Roteamento/Switching (Cisco Nexus)", 85, "Telecomunicações")
+            new Skill("Proxmox HA", 95, "Infraestrutura Crítica", "https://cdn.simpleicons.org/proxmox/E53B00/FFFFFF"),
+            new Skill("Storage SAN", 90, "Infraestrutura Crítica", "https://img.icons8.com/ios-filled/50/FFFFFF/storage-area-network.png"),
+            new Skill("Terraform", 85, "Infraestrutura Crítica", "https://cdn.simpleicons.org/terraform/7B42BC/FFFFFF"),
+            new Skill("Node.js / Express", 90, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nodedotjs/339933/FFFFFF"),
+            new Skill("React / Next.js", 90, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nextdotjs/000000/FFFFFF"),
+            new Skill("Python", 85, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/python/3776AB/FFFFFF"),
+            new Skill("Roteamento/Switching (Cisco Nexus)", 85, "Telecomunicações", "https://cdn.simpleicons.org/cisco/1BA0D7/FFFFFF")
         );
     }
 
     @GetMapping("/projects")
     public List<Project> getProjects() {
         return Arrays.asList(
-            new Project("Gerenciador InfraCenter", 
+            new Project("InfraVision",
                         "Plataforma O&M para Data Center, evoluída de PoC para cluster Proxmox HA/SAN/Cisco Nexus.",
                         "https://github.com/davidsoncabista/InfraCenter",
-                        "#",
+                        "https://studio--infravision2.us-central1.hosted.app/login1",
                         "Em Produção (Nuvem Privada)",
                         Arrays.asList("Proxmox", "Node.js", "React", "HP SAN", "Cisco Nexus")),
-            new Project("Sistema de Gestão (Dungeon App)", 
+            new Project("Sistema de Gestão para Associação",
                         "Plataforma full-stack para gestão de membros, reservas e pagamentos de associação.",
                         "https://github.com/davidsoncabista/Dungeon-App/",
-                        "#",
+                        "https://studio--adbelm.us-central1.hosted.app/landing",
                         "Ativo / Lançado",
                         Arrays.asList("Next.js", "TypeScript", "Firebase", "Stripe"))
         );
@@ -84,67 +84,44 @@ class Profile {
     }
 
     // Getters
-    public String getName() {
-        return name;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public String getLinkedinUrl() {
-        return linkedinUrl;
-    }
-
-    public String getGithubUrl() {
-        return githubUrl;
-    }
-
-    public String getYoutubeUrl() {
-        return youtubeUrl;
-    }
+    public String getName() { return name; }
+    public String getTitle() { return title; }
+    public String getSummary() { return summary; }
+    public String getLinkedinUrl() { return linkedinUrl; }
+    public String getGithubUrl() { return githubUrl; }
+    public String getYoutubeUrl() { return youtubeUrl; }
 }
 
 class Skill {
     private String name;
     private Integer proficiency;
     private String category;
+    private String logo;
 
-    public Skill(String name, Integer proficiency, String category) {
+    public Skill(String name, Integer proficiency, String category, String logo) {
         this.name = name;
         this.proficiency = proficiency;
         this.category = category;
+        this.logo = logo;
     }
 
     // Getters
-    public String getName() {
-        return name;
-    }
-
-    public Integer getProficiency() {
-        return proficiency;
-    }
-    
-    public String getCategory() {
-        return category;
-    }
+    public String getName() { return name; }
+    public Integer getProficiency() { return proficiency; }
+    public String getCategory() { return category; }
+    public String getLogo() { return logo; }
 }
 
 class Project {
-    private String name;
+    private String title;
     private String description;
     private String githubUrl;
     private String demoUrl;
     private String status;
     private List<String> technologies;
 
-
-    public Project(String name, String description, String githubUrl, String demoUrl, String status, List<String> technologies) {
-        this.name = name;
+    public Project(String title, String description, String githubUrl, String demoUrl, String status, List<String> technologies) {
+        this.title = title;
         this.description = description;
         this.githubUrl = githubUrl;
         this.demoUrl = demoUrl;
@@ -153,27 +130,10 @@ class Project {
     }
 
     // Getters
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-    
-    public String getGithubUrl() {
-        return githubUrl;
-    }
-
-    public String getDemoUrl() {
-        return demoUrl;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public List<String> getTechnologies() {
-        return technologies;
-    }
+    public String getTitle() { return title; }
+    public String getDescription() { return description; }
+    public String getGithubUrl() { return githubUrl; }
+    public String getDemoUrl() { return demoUrl; }
+    public String getStatus() { return status; }
+    public List<String> getTechnologies() { return technologies; }
 }
