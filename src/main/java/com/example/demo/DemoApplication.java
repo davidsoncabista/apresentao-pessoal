@@ -46,7 +46,7 @@ class ProfileController {
             new Skill("React / Next.js", 90, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nextdotjs/000000/FFFFFF"),
             new Skill("Python", 60, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/python/3776AB/FFFFFF"),
             new Skill("Roteamento/Switching (Cisco Nexus)", 85, "Telecomunicações", "https://cdn.simpleicons.org/cisco/1BA0D7/FFFFFF"),
-            new Skill("Java / Spring Boot", 60, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/springboot/6DB33F/FFFFFF")
+            new Skill("Java", 60, "Desenvolvimento Full-Stack", "https://img.icons8.com/color/48/java-coffee-cup-logo.png")
         );
     }
 
