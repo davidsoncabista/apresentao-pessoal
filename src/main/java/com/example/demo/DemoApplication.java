@@ -65,7 +65,7 @@ class ProfileController {
                         "https://studio--infravision2.us-central1.hosted.app/login1",
                         "Em Produção (Nuvem Privada)",
                         Arrays.asList("Proxmox", "Node.js", "React", "HP SAN", "Cisco Nexus")),
-            new Project("Sistema de Gestão para Associação",
+            new Project("Sistema de Gestão para Associação (SaaS)",
                         "Plataforma full-stack para gestão de membros, reservas e pagamentos de associação.",
                         "https://github.com/davidsoncabista/Dungeon-App/",
                         "https://studio--adbelm.us-central1.hosted.app/landing",
