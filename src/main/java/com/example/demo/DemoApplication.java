@@ -57,31 +57,36 @@ class ProfileController {
                         "https://github.com/davidsoncabista/apresentao-pessoal.git",
                         "https://davidson-portfolio-api.onrender.com/",
                         "Em Produção",
-                        Arrays.asList("Java", "Spring Boot", "Maven", "Docker", "H2")),
+                        Arrays.asList("Java", "Spring Boot", "Maven", "Docker", "H2"),
+                        "https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-icons.com%2Fpt%2Ficone%2Fdesenvolvedor-de-software-codificador-programa-programador-trabalhador%2F108605&psig=AOvVaw19nF_XG0kZ2h5R2Jz5qZ2P&ust=1700234084227000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLiP6Z3hyYIDFQAAAAAdAAAAABAE"),
             new Project("Armazenamento de Objetos S3 (MinIO)",
                         "Instância autogerenciada de armazenamento de objetos compatível com a API S3, rodando em Proxmox. Usado para armazenar artefatos, backups e arquivos de mídia.",
                         "",
                         "http://s3.davidson.dev.br:9000",
                         "Em Produção (On-Premise)",
-                        Arrays.asList("MinIO", "Proxmox", "Docker", "S3 API")),
+                        Arrays.asList("MinIO", "Proxmox", "Docker", "S3 API"),
+                        "https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-icons.com%2Fpt%2Ficone%2Fdesenvolvedor-de-software-codificador-programa-programador-trabalhador%2F108605&psig=AOvVaw19nF_XG0kZ2h5R2Jz5qZ2P&ust=1700234084227000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLiP6Z3hyYIDFQAAAAAdAAAAABAE"),
             new Project("Nuvem Pessoal com Nextcloud",
                         "Plataforma de colaboração e armazenamento de arquivos, hospedada em infraestrutura própria (Proxmox) para garantir privacidade e controle total dos dados.",
                         "",
                         "http://nextcloud.davidson.dev.br",
                         "Em Produção (On-Premise)",
-                        Arrays.asList("Nextcloud", "Proxmox", "MariaDB", "Docker")),
+                        Arrays.asList("Nextcloud", "Proxmox", "MariaDB", "Docker"),
+                        "https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-icons.com%2Fpt%2Ficone%2Fdesenvolvedor-de-software-codificador-programa-programador-trabalhador%2F108605&psig=AOvVaw19nF_XG0kZ2h5R2Jz5qZ2P&ust=1700234084227000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLiP6Z3hyYIDFQAAAAAdAAAAABAE"),
             new Project("InfraVision",
                         "Plataforma O&M para Data Center, evoluída de PoC para cluster Proxmox HA/SAN/Cisco Nexus.",
                         "https://github.com/davidsoncabista/InfraCenter",
                         "https://studio--infravision2.us-central1.hosted.app/login1",
                         "Em Produção (Nuvem Privada)",
-                        Arrays.asList("Proxmox", "Node.js", "React", "HP SAN", "Cisco Nexus")),
+                        Arrays.asList("Proxmox", "Node.js", "React", "HP SAN", "Cisco Nexus"),
+                        "https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-icons.com%2Fpt%2Ficone%2Fdesenvolvedor-de-software-codificador-programa-programador-trabalhador%2F108605&psig=AOvVaw19nF_XG0kZ2h5R2Jz5qZ2P&ust=1700234084227000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLiP6Z3hyYIDFQAAAAAdAAAAABAE"),
             new Project("Sistema de Gestão para Associação (SaaS)",
                         "Plataforma full-stack para gestão de membros, reservas e pagamentos de associação.",
                         "https://github.com/davidsoncabista/Dungeon-App/",
                         "https://studio--adbelm.us-central1.hosted.app/landing",
                         "Ativo / Lançado",
-                        Arrays.asList("Next.js", "TypeScript", "Firebase", "Stripe"))
+                        Arrays.asList("Next.js", "TypeScript", "Firebase", "Stripe"),
+                        "https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-icons.com%2Fpt%2Ficone%2Fdesenvolvedor-de-software-codificador-programa-programador-trabalhador%2F108605&psig=AOvVaw19nF_XG0kZ2h5R2Jz5qZ2P&ust=1700234084227000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLiP6Z3hyYIDFQAAAAAdAAAAABAE")
         );
     }
 }
@@ -139,14 +144,16 @@ class Project {
     private String demoUrl;
     private String status;
     private List<String> technologies;
+    private String imageUrl;
 
-    public Project(String title, String description, String githubUrl, String demoUrl, String status, List<String> technologies) {
+    public Project(String title, String description, String githubUrl, String demoUrl, String status, List<String> technologies, String imageUrl) {
         this.title = title;
         this.description = description;
         this.githubUrl = githubUrl;
         this.demoUrl = demoUrl;
         this.status = status;
         this.technologies = technologies;
+        this.imageUrl = imageUrl;
     }
 
     // Getters
@@ -156,4 +163,5 @@ class Project {
     public String getDemoUrl() { return demoUrl; }
     public String getStatus() { return status; }
     public List<String> getTechnologies() { return technologies; }
+    public String getImageUrl() { return imageUrl; }
 }
