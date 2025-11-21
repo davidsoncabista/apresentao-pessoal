@@ -38,14 +38,14 @@ class ProfileController {
     public List<Skill> getSkills() {
         return Arrays.asList(
             new Skill("Terraform", 70, "Infraestrutura Crítica", "https://cdn.simpleicons.org/terraform/7B42BC/FFFFFF"),
-            new Skill("Kubernetes", 80, "Infraestrutura Crítica", "https://cdn.simpleicons.org/kubernetes/326CE5/FFFFFF"),
-            new Skill("Docker", 90, "Infraestrutura Crítica", "https://cdn.simpleicons.org/docker/2496ED/FFFFFF"),
+            new Skill("Kubernetes", 85, "Infraestrutura Crítica", "https://cdn.simpleicons.org/kubernetes/326CE5/FFFFFF"),
+            new Skill("Docker", 80, "Infraestrutura Crítica", "https://cdn.simpleicons.org/docker/2496ED/FFFFFF"),
+            new Skill("HTML5", 80, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/html5/E34F26/FFFFFF"),
             new Skill("Proxmox HA", 95, "Infraestrutura Crítica", "https://cdn.simpleicons.org/proxmox/E53B00/FFFFFF"),        
-            new Skill("Node.js ", 95, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nodedotjs/339933/FFFFFF"),
-            new Skill("React", 90, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nextdotjs/000000/FFFFFF"),
+            new Skill("Node.js / Express", 90, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nodedotjs/339933/FFFFFF"),
+            new Skill("React / Next.js", 90, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nextdotjs/000000/FFFFFF"),
             new Skill("Python", 60, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/python/3776AB/FFFFFF"),
-            new Skill("Java", 60, "Desenvolvimento Full-Stack", "https://img.icons8.com/color/48/java-coffee-cup-logo.png"),
-            new Skill("HTML5", 80, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/html5/E34F26/FFFFFF")
+            new Skill("Java", 60, "Desenvolvimento Full-Stack", "https://img.icons8.com/color/48/java-coffee-cup-logo.png")
         );
     }
 
@@ -58,8 +58,20 @@ class ProfileController {
                         "https://davidson-portfolio-api.onrender.com/",
                         "Em Produção",
                         Arrays.asList("Java", "Spring Boot", "Maven", "Docker", "H2")),
+            new Project("Armazenamento de Objetos S3 (MinIO)",
+                        "Instância autogerenciada de armazenamento de objetos compatível com a API S3, rodando em Proxmox. Usado para armazenar artefatos, backups e arquivos de mídia.",
+                        "",
+                        "http://s3.davidson.dev.br:9000",
+                        "Em Produção (On-Premise)",
+                        Arrays.asList("MinIO", "Proxmox", "Docker", "S3 API")),
+            new Project("Nuvem Pessoal com Nextcloud",
+                        "Plataforma de colaboração e armazenamento de arquivos, hospedada em infraestrutura própria (Proxmox) para garantir privacidade e controle total dos dados.",
+                        "",
+                        "http://nextcloud.davidson.dev.br",
+                        "Em Produção (On-Premise)",
+                        Arrays.asList("Nextcloud", "Proxmox", "MariaDB", "Docker")),
             new Project("InfraVision",
-                        "Plataforma de O&M para Data Centers com gestão visual. Integra visualização Bayface (elevação), mapas de footprint para localização física de ativos e inventário detalhado.",
+                        "Plataforma O&M para Data Center, evoluída de PoC para cluster Proxmox HA/SAN/Cisco Nexus.",
                         "https://github.com/davidsoncabista/InfraCenter",
                         "https://studio--infravision2.us-central1.hosted.app/login1",
                         "Em Produção (Nuvem Privada)",
