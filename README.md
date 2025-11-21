@@ -14,6 +14,7 @@ A API foi totalmente containerizada com Docker e está implantada em uma infraes
 2.  **Containerização:** Definição de `Dockerfile` para ambientes de produção.
 3.  **Frontend Simples:** Servir uma página de status estática (`index.html`) com Spring Boot.
 4.  **Gerenciamento de Infraestrutura On-Premise:** Configuração e hospedagem de um serviço de armazenamento de objetos (MinIO) em um ambiente de virtualização próprio (Proxmox), demonstrando habilidades em provisionamento e gerenciamento de infraestrutura.
+5.  **Integração com Armazenamento de Objetos:** Endpoint que consome de um bucket MinIO para listar dinamicamente URLs de imagens para uma galeria.
 
 ---
 
@@ -50,23 +51,27 @@ Esta API expõe os seguintes endpoints REST para consulta dos dados do meu perfi
 *   **`GET /skills`**: Lista minhas competências técnicas, separadas por categoria (Infraestrutura Crítica, Desenvolvimento Full-Stack).
 *   **`GET /projects`**: Apresenta uma lista dos meus principais projetos, com descrição, links e tecnologias utilizadas.
 *   **`GET /health`**: Endpoint de verificação de saúde que retorna "OK" se a aplicação estiver no ar.
+*   **`GET /api/gallery`**: Retorna uma lista de URLs de imagens armazenadas no bucket do MinIO, prontas para serem consumidas por um frontend de galeria.
 
 ---
 
 ## 🚀 Como Executar o Projeto
 
-Você pode rodar a aplicação localmente via Maven ou utilizando Docker.
+Você pode rodar a aplicação localmente via Maven Wrapper ou utilizando Docker.
 
-### 1. Execução via Maven (Local)
+### 1. Execução via Maven Wrapper (Local)
 
-Certifique-se de ter o JDK 17 e o Maven instalados.
+Certifique-se de ter o JDK 17 instalado.
 
 ```bash
+# (No Linux/macOS) Torna o script do wrapper executável
+chmod +x mvnw
+
 # Instala as dependências e constrói o projeto
-mvn clean install
+./mvnw clean install
 
 # Executa a aplicação Spring Boot
-mvn spring-boot:run
+./mvnw spring-boot:run
 ```
 A página de status da API estará disponível em `http://localhost:8080/`. Os endpoints da API podem ser acessados a partir dessa base (ex: `http://localhost:8080/profile`).
 
