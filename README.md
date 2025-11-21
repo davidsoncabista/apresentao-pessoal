@@ -30,6 +30,8 @@ Ao acessar a URL raiz da aplicação (ex: `http://localhost:8080/`), você encon
 * **Gerenciador de Dependências:** Maven
 * **Containerização:** Docker
 * **Banco de Dados (POC):** H2 Database (em memória)
+* **Armazenamento de Objetos (S3-Compatible):** MinIO
+* **Infraestrutura:** Proxmox VE com Ubuntu Server em container LXC
 
 ---
 
@@ -52,6 +54,7 @@ Este projeto demonstra as seguintes competências técnicas:
 1.  **Desenvolvimento Backend:** Modelagem de dados e exposição de recursos via RESTful Web Services usando Spring Boot.
 2.  **Containerização:** Definição de `Dockerfile` para ambientes de produção.
 3.  **Frontend Simples:** Servir uma página de status estática (`index.html`) com Spring Boot.
+4.  **Gerenciamento de Infraestrutura On-Premise:** Configuração e hospedagem de um serviço de armazenamento de objetos (MinIO) em um ambiente de virtualização próprio (Proxmox), demonstrando habilidades em provisionamento e gerenciamento de infraestrutura.
 
 ---
 

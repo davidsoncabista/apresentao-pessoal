@@ -37,16 +37,15 @@ class ProfileController {
     @GetMapping("/skills")
     public List<Skill> getSkills() {
         return Arrays.asList(
-            new Skill("Docker", 80, "Infraestrutura Crítica", "https://cdn.simpleicons.org/docker/2496ED/FFFFFF"),
-            new Skill("HTML5", 80, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/html5/E34F26/FFFFFF"),
-            new Skill("Proxmox HA", 95, "Infraestrutura Crítica", "https://cdn.simpleicons.org/proxmox/E53B00/FFFFFF"),
-            new Skill("Storage SAN", 80, "Infraestrutura Crítica", "https://img.icons8.com/ios-filled/50/database.png"),
             new Skill("Terraform", 70, "Infraestrutura Crítica", "https://cdn.simpleicons.org/terraform/7B42BC/FFFFFF"),
-            new Skill("Node.js / Express", 90, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nodedotjs/339933/FFFFFF"),
-            new Skill("React / Next.js", 90, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nextdotjs/000000/FFFFFF"),
+            new Skill("Kubernetes", 80, "Infraestrutura Crítica", "https://cdn.simpleicons.org/kubernetes/326CE5/FFFFFF"),
+            new Skill("Docker", 90, "Infraestrutura Crítica", "https://cdn.simpleicons.org/docker/2496ED/FFFFFF"),
+            new Skill("Proxmox HA", 95, "Infraestrutura Crítica", "https://cdn.simpleicons.org/proxmox/E53B00/FFFFFF"),        
+            new Skill("Node.js ", 95, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nodedotjs/339933/FFFFFF"),
+            new Skill("React", 90, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nextdotjs/000000/FFFFFF"),
             new Skill("Python", 60, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/python/3776AB/FFFFFF"),
-            new Skill("Roteamento/Switching (Cisco Nexus)", 85, "Telecomunicações", "https://cdn.simpleicons.org/cisco/1BA0D7/FFFFFF"),
-            new Skill("Java", 60, "Desenvolvimento Full-Stack", "https://img.icons8.com/color/48/java-coffee-cup-logo.png")
+            new Skill("Java", 60, "Desenvolvimento Full-Stack", "https://img.icons8.com/color/48/java-coffee-cup-logo.png"),
+            new Skill("HTML5", 80, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/html5/E34F26/FFFFFF")
         );
     }
 
@@ -60,7 +59,7 @@ class ProfileController {
                         "Em Produção",
                         Arrays.asList("Java", "Spring Boot", "Maven", "Docker", "H2")),
             new Project("InfraVision",
-                        "Plataforma O&M para Data Center, evoluída de PoC para cluster Proxmox HA/SAN/Cisco Nexus.",
+                        "Plataforma de O&M para Data Centers com gestão visual. Integra visualização Bayface (elevação), mapas de footprint para localização física de ativos e inventário detalhado.",
                         "https://github.com/davidsoncabista/InfraCenter",
                         "https://studio--infravision2.us-central1.hosted.app/login1",
                         "Em Produção (Nuvem Privada)",
