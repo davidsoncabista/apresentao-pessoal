@@ -1,25 +1,19 @@
-<p align="center">
-  <img src="./Gemini_Generated_Image_jfcutvjfcutvjfcu.jpg" alt="Logo Davidson.dev: Letra D com um Bracket e um Servidor" width="200"/>
-  <h1 align="center">Portfólio Backend API: Prova de Conceito de Habilidades</h1>
-</p>
+# API de Portfólio Pessoal em Java
 
-## 🚀 Visão Geral do Projeto
+## 📜 Descrição
 
-Este projeto é um serviço minimalista em Java, utilizando **Spring Boot 3**, projetado para atuar como o **Backend Headless** do meu portfólio (`davidson.dev.br`).
+Esta é uma API RESTful desenvolvida em **Java com Spring Boot**, projetada para servir como o backend headless para o meu portfólio pessoal ([davidson.dev.br](https://davidson.dev.br)). A aplicação expõe endpoints que fornecem informações sobre meu perfil profissional, skills, projetos e outras informações relevantes.
 
-O objetivo é demonstrar a proficiência no desenvolvimento de APIs robustas e escaláveis, que é uma habilidade central para um **Arquiteto de Soluções de Infraestrutura**.
-
-### 🎯 Proposta de Valor
-
-O código serve como uma prova de conceito de como meus dados de portfólio (perfil, habilidades e projetos) são modelados e expostos através de endpoints REST, simulando a base de dados que alimentaria la aplicação web.
-
-* **Lema:** "Construir soluções robustas, não o próximo problema."
+A API foi totalmente containerizada com Docker e está implantada em uma infraestrutura on-premise que eu mesmo gerencio, utilizando Proxmox VE.
 
 ---
 
-## 🌐 Página de Status da API
+## ✨ Funcionalidades Principais
 
-Ao acessar a URL raiz da aplicação (ex: `http://localhost:8080/`), você encontrará uma página de status visual. Esta página serve como uma "porta de entrada" para a API, confirmando que o serviço está online e listando todos os endpoints disponíveis para interação.
+1.  **Desenvolvimento Backend:** Modelagem de dados e exposição de recursos via RESTful Web Services usando Spring Boot.
+2.  **Containerização:** Definição de `Dockerfile` para ambientes de produção.
+3.  **Frontend Simples:** Servir uma página de status estática (`index.html`) com Spring Boot.
+4.  **Gerenciamento de Infraestrutura On-Premise:** Configuração e hospedagem de um serviço de armazenamento de objetos (MinIO) em um ambiente de virtualização próprio (Proxmox), demonstrando habilidades em provisionamento e gerenciamento de infraestrutura.
 
 ---
 
@@ -35,26 +29,27 @@ Ao acessar a URL raiz da aplicação (ex: `http://localhost:8080/`), você encon
 
 ---
 
+## 🏗️ Arquitetura de Hospedagem On-Premise
+
+A aplicação está hospedada em uma infraestrutura própria, gerenciada com Proxmox VE. Cada serviço é isolado em seu próprio container LXC para garantir modularidade e segurança. O acesso externo é gerenciado pelo Cloudflare, que aponta para os serviços através dos seguintes subdomínios:
+
+- **`nextcloud.davidson.dev.br`**: Instância do Nextcloud para armazenamento e colaboração.
+- **`s3.davidson.dev.br:9000`**: Endpoint do MinIO, compatível com a API S3 da AWS.
+- **`storage.davidson.dev.br:9090`**: Interface de usuário do MinIO.
+- **`davidson.dev.br`**: Página principal (frontend), servida por um container Nginx na porta 80.
+
+O Nextcloud utiliza uma instância dedicada do **MariaDB** como banco de dados.
+
+---
+
 ## ⚙️ Endpoints da API
 
 Esta API expõe os seguintes endpoints REST para consulta dos dados do meu perfil:
 
-| Endpoint | Método | Descrição | Modelo de Resposta |
-| :--- | :--- | :--- | :--- |
-| `/profile` | `GET` | Retorna o nome, título, resumo e links sociais do autor. | `Profile` |
-| `/skills` | `GET` | Retorna a lista de habilidades, incluindo categoria, nível de proficiência e logo. | `List<Skill>` |
-| `/projects` | `GET` | Retorna a lista de projetos, incluindo título, descrição, status e tecnologias. | `List<Project>` |
-
----
-
-## 💡 Habilidades Demonstradas
-
-Este projeto demonstra as seguintes competências técnicas:
-
-1.  **Desenvolvimento Backend:** Modelagem de dados e exposição de recursos via RESTful Web Services usando Spring Boot.
-2.  **Containerização:** Definição de `Dockerfile` para ambientes de produção.
-3.  **Frontend Simples:** Servir uma página de status estática (`index.html`) com Spring Boot.
-4.  **Gerenciamento de Infraestrutura On-Premise:** Configuração e hospedagem de um serviço de armazenamento de objetos (MinIO) em um ambiente de virtualização próprio (Proxmox), demonstrando habilidades em provisionamento e gerenciamento de infraestrutura.
+*   **`GET /profile`**: Retorna os dados do meu perfil profissional, incluindo nome, título, resumo e links para redes sociais.
+*   **`GET /skills`**: Lista minhas competências técnicas, separadas por categoria (Infraestrutura Crítica, Desenvolvimento Full-Stack).
+*   **`GET /projects`**: Apresenta uma lista dos meus principais projetos, com descrição, links e tecnologias utilizadas.
+*   **`GET /health`**: Endpoint de verificação de saúde que retorna "OK" se a aplicação estiver no ar.
 
 ---
 
