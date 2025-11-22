@@ -12,21 +12,44 @@ A API foi totalmente containerizada com Docker e está implantada em uma infraes
 
 1.  **Desenvolvimento Backend:** Modelagem de dados e exposição de recursos via RESTful Web Services usando Spring Boot.
 2.  **Containerização:** Definição de `Dockerfile` para ambientes de produção.
-3.  **Frontend Simples:** Servir uma página de status estática (`index.html`) com Spring Boot.
-4.  **Gerenciamento de Infraestrutura On-Premise:** Configuração e hospedagem de um serviço de armazenamento de objetos (MinIO) em um ambiente de virtualização próprio (Proxmox), demonstrando habilidades em provisionamento e gerenciamento de infraestrutura.
-5.  **Integração com Armazenamento de Objetos:** Endpoint que consome de um bucket MinIO para listar dinamicamente URLs de imagens para uma galeria.
+3.  **Gerenciamento de Infraestrutura On-Premise:** Configuração e hospedagem de serviços em um ambiente de virtualização próprio (Proxmox), demonstrando habilidades em provisionamento e gerenciamento.
+4.  **📸 Galeria e Mídia:** Integração com Object Storage (MinIO) para servir ativos de mídia dinamicamente.
+5.  **Frontend Simples:** Servir uma página de status estática (`index.html`) com Spring Boot.
 
 ---
 
 ## 🛠️ Stack Tecnológico
 
-* **Linguagem:** Java 17
-* **Framework:** Spring Boot 3.2.1
-* **Gerenciador de Dependências:** Maven
-* **Containerização:** Docker
-* **Banco de Dados (POC):** H2 Database (em memória)
-* **Armazenamento de Objetos (S3-Compatible):** MinIO
-* **Infraestrutura:** Proxmox VE com Ubuntu Server em container LXC
+*   **Linguagem:** Java 17
+*   **Framework:** Spring Boot 3.2.1
+*   **Gerenciador de Dependências:** Maven
+*   **Containerização:** Docker
+*   **Armazenamento de Objetos (S3-Compatible):** MinIO
+*   **Infraestrutura:** Proxmox VE com Ubuntu Server em container LXC
+
+---
+
+## 🧠 Competências
+
+A API organiza as competências nas seguintes categorias, que podem ser consultadas através do endpoint `/skills`:
+
+### DevOps
+- Provisionamento e automação de infraestrutura.
+- Orquestração de containers (Docker).
+- Práticas de Integração e Entrega Contínua (CI/CD).
+
+### Infraestrutura Crítica
+- **PUE (Power Usage Effectiveness):** Análise e otimização da eficiência energética de Data Centers.
+- **Sistemas de Clima (HVAC):** Gerenciamento e monitoramento de sistemas de refrigeração de precisão.
+- **UPS (Uninterruptible Power Supply):** Implantação e manutenção de sistemas de energia ininterrupta.
+- **Sistemas de Energia:** Gerenciamento de fontes e retificadores de energia (ex: Eltek, Delta).
+- **USCA (Unidade de Supervisão para Corrente Alternada):** Monitoramento e controle de quadros de distribuição.
+- **Comandos Elétricos:** Automação e controle de acionamentos em infraestrutura.
+- **Sistemas de Alarme:** Configuração de monitoramento por contato seco para eventos críticos.
+
+### Desenvolvimento Full-Stack
+- Desenvolvimento de APIs RESTful com Java e Spring Boot.
+- Modelagem e consumo de serviços web.
 
 ---
 
@@ -47,11 +70,14 @@ O Nextcloud utiliza uma instância dedicada do **MariaDB** como banco de dados.
 
 Esta API expõe os seguintes endpoints REST para consulta dos dados do meu perfil:
 
-*   **`GET /profile`**: Retorna os dados do meu perfil profissional, incluindo nome, título, resumo e links para redes sociais.
-*   **`GET /skills`**: Lista minhas competências técnicas, separadas por categoria (Infraestrutura Crítica, Desenvolvimento Full-Stack).
-*   **`GET /projects`**: Apresenta uma lista dos meus principais projetos, com descrição, links e tecnologias utilizadas.
-*   **`GET /health`**: Endpoint de verificação de saúde que retorna "OK" se a aplicação estiver no ar.
-*   **`GET /api/gallery`**: Retorna uma lista de URLs de imagens armazenadas no bucket do MinIO, prontas para serem consumidas por um frontend de galeria.
+*   **`GET /profile`**: Retorna os dados do meu perfil profissional.
+*   **`GET /skills`**: Lista minhas competências técnicas, agrupadas por categoria.
+*   **`GET /projects`**: Apresenta uma lista dos meus principais projetos.
+*   **`GET /health`**: Endpoint de verificação de saúde da aplicação.
+*   **`GET /api/gallery`**:
+    *   **Descrição:** Lista as URLs públicas de todas as imagens armazenadas no bucket `portfolio-image`.
+    *   **Resposta:** JSON Array de Strings `["https://s3.../img1.jpg", "https://s3.../img2.jpg"]`.
+    *   **Uso:** Consumido pelo Frontend para renderizar a seção de fotos/certificados.
 
 ---
 

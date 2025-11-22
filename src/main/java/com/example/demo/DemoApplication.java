@@ -37,11 +37,29 @@ class ProfileController {
     @GetMapping("/skills")
     public List<Skill> getSkills() {
         return Arrays.asList(
-            new Skill("Terraform", 70, "Infraestrutura Crítica", "https://cdn.simpleicons.org/terraform/7B42BC/FFFFFF"),
-            new Skill("Kubernetes", 85, "Infraestrutura Crítica", "https://cdn.simpleicons.org/kubernetes/326CE5/FFFFFF"),
-            new Skill("Docker", 80, "Infraestrutura Crítica", "https://cdn.simpleicons.org/docker/2496ED/FFFFFF"),
+            // DevOps
+            new Skill("Proxmox HA", 95, "DevOps", "https://cdn.simpleicons.org/proxmox/E53B00/FFFFFF"),
+            new Skill("Terraform", 70, "DevOps", "https://cdn.simpleicons.org/terraform/7B42BC/FFFFFF"),
+            new Skill("Kubernetes", 85, "DevOps", "https://cdn.simpleicons.org/kubernetes/326CE5/FFFFFF"),
+            new Skill("Docker", 80, "DevOps", "https://cdn.simpleicons.org/docker/2496ED/FFFFFF"),
+
+            // Infraestrutura Crítica
+            new Skill("PUE", 85, "Infraestrutura Crítica", "https://cdn.simpleicons.org/leaf/4CAF50/FFFFFF"),
+            new Skill("Sistemas de Clima", 90, "Infraestrutura Crítica", "https://cdn.simpleicons.org/snowflake/00BFFF/FFFFFF"),
+            new Skill("UPS", 90, "Infraestrutura Crítica", "https://cdn.simpleicons.org/powershell/5391FE/FFFFFF"),
+            new Skill("Sistemas de Energia", 95, "Infraestrutura Crítica", "https://cdn.simpleicons.org/lightning/FFD700/FFFFFF"),
+            new Skill("USCA", 80, "Infraestrutura Crítica", "https://cdn.simpleicons.org/microchip/2D2D2D/FFFFFF"),
+            new Skill("Comandos Elétricos", 85, "Infraestrutura Crítica", "https://cdn.simpleicons.org/cogs/808080/FFFFFF"),
+            new Skill("Sistemas de Alarme", 90, "Infraestrutura Crítica", "https://cdn.simpleicons.org/sonarsource/E6001A/FFFFFF"),
+
+            // Infraestrutura Física e Cabeamento
+            new Skill("Cabeamento Estruturado", 95, "Infraestrutura Física e Cabeamento", "https://img.icons8.com/ios-filled/50/ethernet-on.png"),
+            new Skill("Fibra Óptica", 90, "Infraestrutura Física e Cabeamento", "https://img.icons8.com/ios-filled/50/optical-fiber.png"),
+            new Skill("Certificação de Redes", 85, "Infraestrutura Física e Cabeamento", "https://img.icons8.com/ios-filled/50/network-checked.png"),
+            new Skill("Montagem de Racks", 95, "Infraestrutura Física e Cabeamento", "https://img.icons8.com/ios-filled/50/server.png"),
+
+            // Desenvolvimento Full-Stack
             new Skill("HTML5", 80, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/html5/E34F26/FFFFFF"),
-            new Skill("Proxmox HA", 95, "Infraestrutura Crítica", "https://cdn.simpleicons.org/proxmox/E53B00/FFFFFF"),        
             new Skill("Node.js / Express", 90, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nodedotjs/339933/FFFFFF"),
             new Skill("React / Next.js", 90, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nextdotjs/000000/FFFFFF"),
             new Skill("Python", 60, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/python/3776AB/FFFFFF"),
