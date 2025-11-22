@@ -43,6 +43,13 @@ class ProfileController {
             new Skill("Kubernetes", 85, "DevOps", "https://cdn.simpleicons.org/kubernetes/326CE5/FFFFFF"),
             new Skill("Docker", 80, "DevOps", "https://cdn.simpleicons.org/docker/2496ED/FFFFFF"),
 
+            // Desenvolvimento Full-Stack
+            new Skill("HTML5", 80, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/html5/E34F26/FFFFFF"),
+            new Skill("Node.js / Express", 90, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nodedotjs/339933/FFFFFF"),
+            new Skill("React / Next.js", 90, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nextdotjs/000000/FFFFFF"),
+            new Skill("Python", 60, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/python/3776AB/FFFFFF"),
+            new Skill("Java", 60, "Desenvolvimento Full-Stack", "https://img.icons8.com/color/48/java-coffee-cup-logo.png"),
+
             // Infraestrutura Crítica
             new Skill("PUE", 85, "Infraestrutura Crítica", "https://cdn.simpleicons.org/leaf/4CAF50/FFFFFF"),
             new Skill("Sistemas de Clima", 90, "Infraestrutura Crítica", "https://cdn.simpleicons.org/snowflake/00BFFF/FFFFFF"),
@@ -56,14 +63,9 @@ class ProfileController {
             new Skill("Cabeamento Estruturado", 95, "Infraestrutura Física e Cabeamento", "https://img.icons8.com/ios-filled/50/ethernet-on.png"),
             new Skill("Fibra Óptica", 90, "Infraestrutura Física e Cabeamento", "https://img.icons8.com/ios-filled/50/optical-fiber.png"),
             new Skill("Certificação de Redes", 85, "Infraestrutura Física e Cabeamento", "https://img.icons8.com/ios-filled/50/network-checked.png"),
-            new Skill("Montagem de Racks", 95, "Infraestrutura Física e Cabeamento", "https://img.icons8.com/ios-filled/50/server.png"),
+            new Skill("Montagem de Racks", 95, "Infraestrutura Física e Cabeamento", "https://img.icons8.com/ios-filled/50/server.png")
 
-            // Desenvolvimento Full-Stack
-            new Skill("HTML5", 80, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/html5/E34F26/FFFFFF"),
-            new Skill("Node.js / Express", 90, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nodedotjs/339933/FFFFFF"),
-            new Skill("React / Next.js", 90, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/nextdotjs/000000/FFFFFF"),
-            new Skill("Python", 60, "Desenvolvimento Full-Stack", "https://cdn.simpleicons.org/python/3776AB/FFFFFF"),
-            new Skill("Java", 60, "Desenvolvimento Full-Stack", "https://img.icons8.com/color/48/java-coffee-cup-logo.png")
+            
         );
     }
 
