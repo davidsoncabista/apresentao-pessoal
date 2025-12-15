@@ -27,5 +27,5 @@ RUN chmod +x entrypoint.sh
 
 EXPOSE 8080
 
-# 5. Usar o script como comando inicial
+# 5. Usar o script como comando inicial By davidson
 ENTRYPOINT ["./entrypoint.sh"]
