@@ -27,5 +27,5 @@ RUN dos2unix entrypoint.sh && chmod +x entrypoint.sh
 
 EXPOSE 8080
 
-# 5. Start
+# 5. Start by davidson
 ENTRYPOINT ["./entrypoint.sh"]

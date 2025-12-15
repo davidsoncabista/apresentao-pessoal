@@ -2,14 +2,13 @@
 
 echo "--- INICIANDO SETUP ---"
 
-# Se o Render não definir a PORT, usa 8080 por padrão
+# Se o Render não definir a PORT, usa 8080 por padrão by davidson
 SERVER_PORT=${PORT:-8080}
 
 echo "Iniciando túnel Cloudflare..."
 nohup cloudflared access tcp --hostname db.davidson.dev.br --url 127.0.0.1:3306 \
     --service-token-id "$CF_ACCESS_CLIENT_ID" \
     --service-token-secret "$CF_ACCESS_CLIENT_SECRET" > cloudflared.log 2>&1 &
-
 echo "Aguardando 5 segundos..."
 sleep 5
 
