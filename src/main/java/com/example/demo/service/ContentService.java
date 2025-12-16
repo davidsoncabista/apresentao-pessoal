@@ -1,11 +1,13 @@
 package com.example.demo.service;
 
+import com.example.demo.Article;
 import com.example.demo.Profile;
 import com.example.demo.Project;
 import com.example.demo.Skill;
 import com.example.demo.entity.ProfileEntity;
 import com.example.demo.entity.ProjectEntity;
 import com.example.demo.entity.SkillEntity;
+import com.example.demo.repository.ArticleRepository;
 import com.example.demo.repository.ProfileRepository;
 import com.example.demo.repository.ProjectRepository;
 import com.example.demo.repository.SkillRepository;
@@ -20,11 +22,13 @@ public class ContentService {
     private final ProfileRepository profileRepo;
     private final SkillRepository skillRepo;
     private final ProjectRepository projectRepo;
+    private final ArticleRepository articleRepo;
 
     public ContentService(ProfileRepository profileRepo, SkillRepository skillRepo, ProjectRepository projectRepo) {
         this.profileRepo = profileRepo;
         this.skillRepo = skillRepo;
         this.projectRepo = projectRepo;
+        this.articleRepo = articleRepo;
     }
 
     public Profile getProfileFallback(Profile defaultProfile) {
@@ -44,5 +48,9 @@ public class ContentService {
         List<ProjectEntity> list = projectRepo.findAll();
         if (list.isEmpty()) return defaultProjects;
         return list.stream().map(e -> new Project(e.getTitle(), e.getDescription(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getTechnologies(), e.getImageUrl())).collect(Collectors.toList());
+    }
+
+    public List<Article> getArticles() {
+        return articleRepo.findAll().stream().map(e -> new Article( e.getId(), e.getTitle(), e.getSummary(), e.getContentUrl(), e.getImageUrl())).collect(Collectors.toList()); .collect(Collectors.toList());
     }
 }
