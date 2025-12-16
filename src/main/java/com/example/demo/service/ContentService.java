@@ -24,7 +24,7 @@ public class ContentService {
     private final ProjectRepository projectRepo;
     private final ArticleRepository articleRepo;
 
-    public ContentService(ProfileRepository profileRepo, SkillRepository skillRepo, ProjectRepository projectRepo) {
+    public ContentService(ProfileRepository profileRepo, SkillRepository skillRepo, ProjectRepository projectRepo, ArticleRepository articleRepo) {
         this.profileRepo = profileRepo;
         this.skillRepo = skillRepo;
         this.projectRepo = projectRepo;
@@ -51,6 +51,8 @@ public class ContentService {
     }
 
     public List<Article> getArticles() {
-        return articleRepo.findAll().stream().map(e -> new Article( e.getId(), e.getTitle(), e.getSummary(), e.getContentUrl(), e.getImageUrl())).collect(Collectors.toList()); .collect(Collectors.toList());
+        return articleRepo.findAll().stream()
+            .map(e -> new Article(e.getId(), e.getTitle(), e.getSummary(), e.getContentUrl(), e.getImageUrl()))
+            .collect(Collectors.toList());
     }
 }
