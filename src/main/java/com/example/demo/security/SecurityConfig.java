@@ -29,7 +29,7 @@ public class SecurityConfig {
                 // Rotas protegidas
                 .requestMatchers("/admin/**").authenticated()
                 // Rotas públicas
-                .requestMatchers("/profile", "/skills", "/projects", "/health", "/", "/index.html", "/css/**", "/js/**", "/images/**", "/api/**").permitAll()
+                .requestMatchers("/profile", "/skills", "/projects", "/articles", "/health", "/", "/index.html", "/css/**", "/js/**", "/images/**", "/api/**").permitAll()
                 .anyRequest().permitAll()
             )
             // MUDANÇA AQUI: Configuração explícita do Login
