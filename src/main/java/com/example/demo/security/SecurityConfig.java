@@ -22,22 +22,26 @@ public class SecurityConfig {
     @Value("${app.admin.password:adminpass}")
     private String adminPassword;
 
-    @Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http
-        .authorizeHttpRequests(authorize -> authorize
-            // Rotas protegidas
-            .requestMatchers("/admin/**").authenticated()
-            // Rotas públicas (Note que mudei para /css/** e /js/**)
-            .requestMatchers("/profile", "/skills", "/projects", "/health", "/", "/index.html", "/css/**", "/js/**", "/images/**", "/api/**").permitAll()
-            .anyRequest().permitAll()
-        )
-        .formLogin(Customizer.withDefaults())
-        .httpBasic(Customizer.withDefaults())
-        .csrf(csrf -> csrf.disable());
+   @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(authorize -> authorize
+                // Rotas protegidas
+                .requestMatchers("/admin/**").authenticated()
+                // Rotas públicas
+                .requestMatchers("/profile", "/skills", "/projects", "/health", "/", "/index.html", "/css/**", "/js/**", "/images/**", "/api/**").permitAll()
+                .anyRequest().permitAll()
+            )
+            // MUDANÇA AQUI: Configuração explícita do Login
+            .formLogin(form -> form
+                .defaultSuccessUrl("/admin/index.html", true) // Força o redirecionamento para o painel admin
+                .permitAll()
+            )
+            .httpBasic(Customizer.withDefaults())
+            .csrf(csrf -> csrf.disable());
 
-    return http.build();
-}
+        return http.build();
+    }
 
     @Bean
     public UserDetailsService users() {
