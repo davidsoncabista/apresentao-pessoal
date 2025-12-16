@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -17,26 +16,36 @@
         <main>
             <section class="about">
                 <h2>Sobre esta API</h2>
-                <p>Esta é uma API RESTful construída com Spring Boot, projetada para servir os dados do meu portfólio profissional. Ela fornece informações sobre meu perfil, habilidades e projetos de forma estruturada (JSON).</p>
+                <p>Esta é uma API RESTful construída com Spring Boot, projetada para servir os dados do meu portfólio profissional. Ela fornece informações sobre meu perfil, habilidades, projetos e artigos de forma estruturada (JSON).</p>
             </section>
             <section class="endpoints">
                 <h2>Endpoints Disponíveis</h2>
                 <p>Para interagir com a API, utilize os seguintes endpoints:</p>
+                
                 <div class="endpoint">
                     <span class="method get">GET</span>
                     <a href="/profile" target="_blank">/profile</a>
                     <p>Retorna um objeto JSON com informações do meu perfil profissional, incluindo links para LinkedIn e GitHub.</p>
                 </div>
+
                 <div class="endpoint">
                     <span class="method get">GET</span>
                     <a href="/skills" target="_blank">/skills</a>
                     <p>Retorna uma lista das minhas habilidades técnicas, classificadas por categoria e nível de proficiência.</p>
                 </div>
+
                 <div class="endpoint">
                     <span class="method get">GET</span>
                     <a href="/projects" target="_blank">/projects</a>
                     <p>Retorna uma lista dos principais projetos em que trabalhei, com descrições, status e tecnologias utilizadas.</p>
                 </div>
+
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <a href="/articles" target="_blank">/articles</a>
+                    <p>Retorna uma lista dos meus artigos publicados, incluindo resumo, imagem de capa e link original.</p>
+                </div>
+
                 <div class="endpoint">
                     <span class="method get">GET</span>
                     <a href="/api/gallery" target="_blank">/api/gallery</a>
@@ -46,7 +55,7 @@
         </main>
         <footer>
             <p>Desenvolvido com ❤️ por Davidson Santos Conceição.</p>
-            <p style="font-size:0.8em;margin-top:8px"><a href="/admin" style="color:inherit;opacity:0.7">Admin</a></p>
+            <p style="font-size:0.8em;margin-top:8px"><a href="/admin/index.html" style="color:inherit;opacity:0.7">Admin</a></p>
         </footer>
     </div>
 </body>
