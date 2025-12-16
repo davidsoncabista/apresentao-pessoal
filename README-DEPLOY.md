@@ -32,10 +32,10 @@ This avoids the MariaDB connection timeout shown when the remote DB is not reach
 Mark the following variables as **Secret** in Render where noted.
 
 - `SPRING_DATASOURCE_URL` (or set `DB_HOST` + `DB_NAME`) — JDBC URL to MariaDB
-  - Example: `jdbc:mariadb://mariadb.davidson.dev.br/portfolio`
+  - Example: `jdbc:mariadb://db.davidson.dev.br/portfolio`
 - `SPRING_DATASOURCE_USERNAME` — DB user (Secret)
 - `SPRING_DATASOURCE_PASSWORD` — DB password (Secret)
-- `DB_HOST` — alternative: `mariadb.davidson.dev.br`
+- `DB_HOST` — alternative: `db.davidson.dev.br`
 - `DB_NAME` — alternative: `portfolio`
 
 - `MINIO_URL` — MinIO endpoint (not secret)
