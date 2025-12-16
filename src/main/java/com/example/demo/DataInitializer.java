@@ -1,8 +1,10 @@
 package com.example.demo;
 
+import com.example.demo.entity.ArticleEntity;
 import com.example.demo.entity.ProfileEntity;
 import com.example.demo.entity.ProjectEntity;
 import com.example.demo.entity.SkillEntity;
+import com.example.demo.repository.ArticleRepository;
 import com.example.demo.repository.ProfileRepository;
 import com.example.demo.repository.ProjectRepository;
 import com.example.demo.repository.SkillRepository;
@@ -19,17 +21,19 @@ public class DataInitializer {
     private final ProfileRepository profileRepo;
     private final SkillRepository skillRepo;
     private final ProjectRepository projectRepo;
+    private final ArticleRepository articleRepo;
 
-    public DataInitializer(ProfileRepository profileRepo, SkillRepository skillRepo, ProjectRepository projectRepo) {
+    public DataInitializer(ProfileRepository profileRepo, SkillRepository skillRepo, ProjectRepository projectRepo, ArticleRepository articleRepo) {
         this.profileRepo = profileRepo;
         this.skillRepo = skillRepo;
         this.projectRepo = projectRepo;
+        this.articleRepo = articleRepo;
     }
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void init() {
-        // Populate DB only if empty
+        // --- PERFIL ---
         if (profileRepo.count() == 0) {
             Profile defaultProfile = new Profile("Davidson Santos Conceição",
                     "Arquiteto de Soluções de Infraestrutura / Desenvolvedor Full-Stack",
@@ -40,7 +44,9 @@ public class DataInitializer {
 
             profileRepo.save(new ProfileEntity(defaultProfile.getName(), defaultProfile.getTitle(), defaultProfile.getSummary(), defaultProfile.getLinkedinUrl(), defaultProfile.getGithubUrl(), defaultProfile.getYoutubeUrl()));
         }
-
+        //==============================================================//
+        //                      --- SKILLS ---           
+        //==============================================================//
         if (skillRepo.count() == 0) {
             java.util.List<Skill> skills = Arrays.asList(
                     new Skill("Proxmox HA", 95, "DevOps", "https://cdn.simpleicons.org/proxmox/E53B00/FFFFFF"),
@@ -69,7 +75,9 @@ public class DataInitializer {
                 skillRepo.save(new SkillEntity(s.getName(), s.getProficiency(), s.getCategory(), s.getLogo()));
             }
         }
-
+        //==============================================================//
+        //                      --- PROJECTS ---            
+        //==============================================================//
         if (projectRepo.count() == 0) {
             java.util.List<Project> projects = Arrays.asList(
                     new Project("API de Portfólio em Java",
@@ -112,6 +120,43 @@ public class DataInitializer {
             for (Project pr : projects) {
                 projectRepo.save(new ProjectEntity(pr.getTitle(), pr.getDescription(), pr.getGithubUrl(), pr.getDemoUrl(), pr.getStatus(), pr.getTechnologies(), pr.getImageUrl()));
             }
+        }
+        //==============================================================//
+        //              --- ARTIGOS (NOVO BLOCO) ---
+        //==============================================================//
+        if (articleRepo.count() == 0) {
+            // Placeholder para imagem se não tiver
+            String defaultImg = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=500&q=60";
+            
+            // Dados baseados no seu Frontend (Versão PT)
+            java.util.List<ArticleEntity> articles = Arrays.asList(
+                new ArticleEntity(
+                    "Os Guardiões Silenciosos",
+                    "Uma reflexão sobre os componentes e profissionais de infraestrutura que, silenciosamente, garantem a estabilidade e o funcionamento da tecnologia moderna.",
+                    defaultImg, 
+                    "https://www.linkedin.com/pulse/os-guardi%25C3%25B5es-silenciosos-davidson-s-concei%25C3%25A7%25C3%25A3o-nqdvf/"
+                ),
+                new ArticleEntity(
+                    "Infraestrutura Estável: O Alicerce Secreto da IA Ágil",
+                    "Uma análise sobre como uma infraestrutura de TI robusta e bem planejada é crucial para o sucesso e a agilidade de projetos de Inteligência Artificial.",
+                    defaultImg,
+                    "https://www.linkedin.com/pulse/infraestrutura-est%25C3%25A1vel-o-alicerce-secreto-da-%25C3%25A1gil-e-s-concei%25C3%25A7%25C3%25A3o-libdf"
+                ),
+                new ArticleEntity(
+                    "Do Código ao Cabo: Uma Jornada de Redescoberta",
+                    "Um artigo sobre a jornada para unir o desenvolvimento de software moderno à infraestrutura de hardware crítica, e por que essa união é essencial para o futuro da tecnologia.",
+                    defaultImg,
+                    "https://www.linkedin.com/pulse/do-c%25C3%25B3digo-ao-cabo-uma-jornada-de-redescoberta-da-davidson-s-concei%25C3%25A7%25C3%25A3o-yo1mf/"
+                ),
+                new ArticleEntity(
+                    "Meu Primeiro Bug: Como uma 'Gambiarra' de R$50 me Ensinou Sobre Resolução de Problemas",
+                    "Uma história sobre uma solução criativa do início da minha carreira e a lição que ela me ensinou sobre pensar fora da caixa para resolver problemas complexos.",
+                    defaultImg,
+                    "https://www.linkedin.com/pulse/meu-primeiro-bug-como-uma-gambiarra-de-r50-me-ensinou-s-concei%25C3%25A7%25C3%25A3o-3ewaf/"
+                )
+            );
+
+            articleRepo.saveAll(articles);
         }
     }
 }
