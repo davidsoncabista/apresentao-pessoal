@@ -3,6 +3,7 @@ package com.example.demo;
 import jakarta.validation.constraints.NotBlank;
 
 public class Profile {
+    private Long id;
     @NotBlank
     private String name;
 
@@ -16,7 +17,8 @@ public class Profile {
 
     public Profile() {}
 
-    public Profile(String name, String title, String summary, String linkedinUrl, String githubUrl, String youtubeUrl) {
+    public Profile(Long id, String name, String title, String summary, String linkedinUrl, String githubUrl, String youtubeUrl) {
+        this.id = id;
         this.name = name;
         this.title = title;
         this.summary = summary;
@@ -25,12 +27,20 @@ public class Profile {
         this.youtubeUrl = youtubeUrl;
     }
 
+    public Profile(String name, String title, String summary, String linkedinUrl, String githubUrl, String youtubeUrl) {
+        this(null, name, title, summary, linkedinUrl, githubUrl, youtubeUrl);
+    }
+
     public String getName() { return name; }
     public String getTitle() { return title; }
     public String getSummary() { return summary; }
     public String getLinkedinUrl() { return linkedinUrl; }
     public String getGithubUrl() { return githubUrl; }
     public String getYoutubeUrl() { return youtubeUrl; }
+
+    public Long getId() { return id; }
+
+    public void setId(Long id) { this.id = id; }
 
     public void setName(String name) { this.name = name; }
     public void setTitle(String title) { this.title = title; }

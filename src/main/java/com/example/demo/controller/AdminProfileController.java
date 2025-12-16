@@ -25,7 +25,7 @@ public class AdminProfileController {
         Optional<ProfileEntity> opt = profileRepo.findAll().stream().findFirst();
         if (opt.isEmpty()) return ResponseEntity.notFound().build();
         ProfileEntity e = opt.get();
-        Profile p = new Profile(e.getName(), e.getTitle(), e.getSummary(), e.getLinkedinUrl(), e.getGithubUrl(), e.getYoutubeUrl());
+        Profile p = new Profile(e.getId(), e.getName(), e.getTitle(), e.getSummary(), e.getLinkedinUrl(), e.getGithubUrl(), e.getYoutubeUrl());
         return ResponseEntity.ok(p);
     }
 
@@ -33,7 +33,8 @@ public class AdminProfileController {
     public ResponseEntity<Profile> createProfile(@Valid @RequestBody Profile profile) {
         ProfileEntity e = new ProfileEntity(profile.getName(), profile.getTitle(), profile.getSummary(), profile.getLinkedinUrl(), profile.getGithubUrl(), profile.getYoutubeUrl());
         profileRepo.save(e);
-        return ResponseEntity.created(URI.create("/admin/api/profile")).body(profile);
+        Profile resp = new Profile(e.getId(), e.getName(), e.getTitle(), e.getSummary(), e.getLinkedinUrl(), e.getGithubUrl(), e.getYoutubeUrl());
+        return ResponseEntity.created(URI.create("/admin/api/profile")).body(resp);
     }
 
     @PutMapping("/{id}")
@@ -46,6 +47,7 @@ public class AdminProfileController {
             e.setGithubUrl(profile.getGithubUrl());
             e.setYoutubeUrl(profile.getYoutubeUrl());
             profileRepo.save(e);
+            profile.setId(id);
             return ResponseEntity.ok(profile);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }

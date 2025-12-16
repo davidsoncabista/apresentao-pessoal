@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 public class Project {
+    private Long id;
     @NotBlank
     private String title;
 
@@ -19,7 +20,8 @@ public class Project {
 
     public Project() {}
 
-    public Project(String title, String description, String githubUrl, String demoUrl, String status, List<String> technologies, String imageUrl) {
+    public Project(Long id, String title, String description, String githubUrl, String demoUrl, String status, List<String> technologies, String imageUrl) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.githubUrl = githubUrl;
@@ -29,6 +31,10 @@ public class Project {
         this.imageUrl = imageUrl;
     }
 
+    public Project(String title, String description, String githubUrl, String demoUrl, String status, List<String> technologies, String imageUrl) {
+        this(null, title, description, githubUrl, demoUrl, status, technologies, imageUrl);
+    }
+
     public String getTitle() { return title; }
     public String getDescription() { return description; }
     public String getGithubUrl() { return githubUrl; }
@@ -36,6 +42,10 @@ public class Project {
     public String getStatus() { return status; }
     public List<String> getTechnologies() { return technologies; }
     public String getImageUrl() { return imageUrl; }
+
+    public Long getId() { return id; }
+
+    public void setId(Long id) { this.id = id; }
 
     public void setTitle(String title) { this.title = title; }
     public void setDescription(String description) { this.description = description; }

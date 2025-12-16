@@ -23,14 +23,15 @@ public class AdminSkillController {
 
     @GetMapping
     public List<Skill> list() {
-        return skillRepo.findAll().stream().map(e -> new Skill(e.getName(), e.getProficiency(), e.getCategory(), e.getLogo())).collect(Collectors.toList());
+        return skillRepo.findAll().stream().map(e -> new Skill(e.getId(), e.getName(), e.getProficiency(), e.getCategory(), e.getLogo())).collect(Collectors.toList());
     }
 
     @PostMapping
     public ResponseEntity<Skill> create(@Valid @RequestBody Skill skill) {
         SkillEntity e = new SkillEntity(skill.getName(), skill.getProficiency(), skill.getCategory(), skill.getLogo());
         skillRepo.save(e);
-        return ResponseEntity.created(URI.create("/admin/api/skills")).body(skill);
+        Skill resp = new Skill(e.getId(), e.getName(), e.getProficiency(), e.getCategory(), e.getLogo());
+        return ResponseEntity.created(URI.create("/admin/api/skills")).body(resp);
     }
 
     @PutMapping("/{id}")
@@ -41,6 +42,7 @@ public class AdminSkillController {
             e.setCategory(skill.getCategory());
             e.setLogo(skill.getLogo());
             skillRepo.save(e);
+            skill.setId(id);
             return ResponseEntity.ok(skill);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }

@@ -3,29 +3,343 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Painel</title>
-    <link rel="stylesheet" href="/style.css">
+    <title>Painel Admin - Davidson</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
+    <div class="admin-container">
         <header>
-            <h1>Painel Admin</h1>
-            <p>Área administrativa (protegida). Use o formulário abaixo para gerenciar conteúdo.</p>
+            <h1>Painel Administrativo</h1>
+            <nav>
+                <button onclick="showTab('profile', this)" class="tab-btn active">Perfil</button>
+                <button onclick="showTab('skills', this)" class="tab-btn">Skills</button>
+                <button onclick="showTab('projects', this)" class="tab-btn">Projetos</button>
+                <a href="/" target="_blank" class="view-site-btn">Ver Site</a>
+            </nav>
         </header>
+
         <main>
-            <section>
-                <h2>Editor Rápido (placeholder)</h2>
-                <p>Este é um placeholder. Em próximos passos implementaremos formulários CRUD para `Profile`, `Skill` e `Project`.</p>
-                <ul>
-                    <li><a href="#">Editar Perfil</a></li>
-                    <li><a href="#">Gerenciar Skills</a></li>
-                    <li><a href="#">Gerenciar Projects</a></li>
-                </ul>
+            <section id="profile" class="tab-content active">
+                <h2>Editar Perfil</h2>
+                <form id="profileForm" onsubmit="saveProfile(event)">
+                    <input type="hidden" id="profileId">
+                    
+                    <div class="form-group">
+                        <label>Nome:</label>
+                        <input type="text" id="pName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Título:</label>
+                        <input type="text" id="pTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Resumo:</label>
+                        <textarea id="pSummary" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>LinkedIn URL:</label>
+                        <input type="url" id="pLinkedin">
+                    </div>
+                    <div class="form-group">
+                        <label>GitHub URL:</label>
+                        <input type="url" id="pGithub">
+                    </div>
+                    <div class="form-group">
+                        <label>YouTube URL:</label>
+                        <input type="url" id="pYoutube">
+                    </div>
+                    <button type="submit" class="save-btn">Salvar Perfil</button>
+                </form>
+            </section>
+
+            <section id="skills" class="tab-content">
+                <div class="section-header">
+                    <h2>Gerenciar Skills</h2>
+                    <button onclick="openSkillModal()" class="add-btn">+ Nova Skill</button>
+                </div>
+                <div id="skillsList" class="cards-grid">
+                    </div>
+            </section>
+
+            <section id="projects" class="tab-content">
+                <div class="section-header">
+                    <h2>Gerenciar Projetos</h2>
+                    <button onclick="openProjectModal()" class="add-btn">+ Novo Projeto</button>
+                </div>
+                <div id="projectsList" class="cards-grid">
+                    </div>
             </section>
         </main>
-        <footer>
-            <p style="font-size:0.9em">Voltar para <a href="/">site</a></p>
-        </footer>
     </div>
+
+    <div id="skillModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('skillModal')">&times;</span>
+            <h3 id="skillModalTitle">Adicionar/Editar Skill</h3>
+            <form id="skillForm" onsubmit="saveSkill(event)">
+                <input type="hidden" id="sId">
+                <label>Nome:</label>
+                <input type="text" id="sName" required>
+                
+                <label>Proficiência (0-100):</label>
+                <input type="number" id="sProficiency" min="0" max="100" required>
+                
+                <label>Categoria:</label>
+                <input type="text" id="sCategory" placeholder="Ex: DevOps, Backend">
+                
+                <label>Logo URL:</label>
+                <input type="url" id="sLogo">
+                
+                <button type="submit" class="save-btn">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('projectModal')">&times;</span>
+            <h3 id="projectModalTitle">Adicionar/Editar Projeto</h3>
+            <form id="projectForm" onsubmit="saveProject(event)">
+                <input type="hidden" id="projId">
+                
+                <label>Título:</label>
+                <input type="text" id="projTitle" required>
+                
+                <label>Descrição:</label>
+                <textarea id="projDesc" rows="3" required></textarea>
+                
+                <label>Github URL:</label>
+                <input type="url" id="projGithub">
+                
+                <label>Demo URL:</label>
+                <input type="url" id="projDemo">
+                
+                <label>Status:</label>
+                <input type="text" id="projStatus" placeholder="Ex: Em Produção">
+                
+                <label>Tecnologias (separadas por vírgula):</label>
+                <input type="text" id="projTechs" placeholder="Java, Spring Boot, Docker">
+                
+                <label>Imagem URL:</label>
+                <input type="url" id="projImage">
+                
+                <button type="submit" class="save-btn">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/admin/api';
+
+        // --- NAVEGAÇÃO ---
+        function showTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            if (btn) btn.classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // --- PERFIL ---
+        async function loadProfile() {
+            try {
+                const res = await fetch(`${API_BASE}/profile`);
+                if (!res.ok) return; // Se 404, deixa vazio
+                const data = await res.json();
+                
+                // Preenche formulário
+                document.getElementById('profileId').value = data.id || ''; // Requer ajuste no Java
+                document.getElementById('pName').value = data.name;
+                document.getElementById('pTitle').value = data.title;
+                document.getElementById('pSummary').value = data.summary;
+                document.getElementById('pLinkedin').value = data.linkedinUrl;
+                document.getElementById('pGithub').value = data.githubUrl;
+                document.getElementById('pYoutube').value = data.youtubeUrl;
+            } catch (e) { console.error('Erro ao carregar perfil', e); }
+        }
+
+        async function saveProfile(e) {
+            e.preventDefault();
+            const id = document.getElementById('profileId').value;
+            const body = {
+                name: document.getElementById('pName').value,
+                title: document.getElementById('pTitle').value,
+                summary: document.getElementById('pSummary').value,
+                linkedinUrl: document.getElementById('pLinkedin').value,
+                githubUrl: document.getElementById('pGithub').value,
+                youtubeUrl: document.getElementById('pYoutube').value
+            };
+
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_BASE}/profile/${id}` : `${API_BASE}/profile`;
+
+            const res = await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            if (res.ok) alert('Perfil salvo com sucesso!');
+            else alert('Erro ao salvar perfil.');
+        }
+
+        // --- SKILLS ---
+        async function loadSkills() {
+            const res = await fetch(`${API_BASE}/skills`);
+            const data = await res.json();
+            const list = document.getElementById('skillsList');
+            list.innerHTML = '';
+
+            data.forEach(skill => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <img src="${skill.logo}" alt="logo" class="mini-logo" onerror="this.style.display='none'">
+                        <strong>${skill.name}</strong>
+                    </div>
+                    <p>${skill.category} - ${skill.proficiency}%</p>
+                    <div class="card-actions">
+                        <button onclick='editSkill(${JSON.stringify(skill)})'>Editar</button>
+                        <button onclick="deleteSkill(${skill.id})" class="danger">Excluir</button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function openSkillModal(skill = null) {
+            document.getElementById('skillModal').style.display = 'block';
+            if (skill) {
+                document.getElementById('sId').value = skill.id || ''; 
+                document.getElementById('sName').value = skill.name;
+                document.getElementById('sProficiency').value = skill.proficiency;
+                document.getElementById('sCategory').value = skill.category;
+                document.getElementById('sLogo').value = skill.logo;
+            } else {
+                document.getElementById('skillForm').reset();
+                document.getElementById('sId').value = '';
+            }
+        }
+
+        window.editSkill = function(skill) { openSkillModal(skill); }
+
+        async function saveSkill(e) {
+            e.preventDefault();
+            const id = document.getElementById('sId').value;
+            const body = {
+                name: document.getElementById('sName').value,
+                proficiency: parseInt(document.getElementById('sProficiency').value),
+                category: document.getElementById('sCategory').value,
+                logo: document.getElementById('sLogo').value
+            };
+
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_BASE}/skills/${id}` : `${API_BASE}/skills`;
+
+            await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            
+            closeModal('skillModal');
+            loadSkills();
+        }
+
+        async function deleteSkill(id) {
+            if (!id) return alert('ID não encontrado. Atualize o Java.');
+            if (!confirm('Tem certeza?')) return;
+            await fetch(`${API_BASE}/skills/${id}`, { method: 'DELETE' });
+            loadSkills();
+        }
+
+        // --- PROJETOS ---
+        async function loadProjects() {
+            const res = await fetch(`${API_BASE}/projects`);
+            const data = await res.json();
+            const list = document.getElementById('projectsList');
+            list.innerHTML = '';
+
+            data.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <strong>${p.title}</strong>
+                    <p class="status-badge">${p.status}</p>
+                    <div class="card-actions">
+                        <button onclick='editProject(${JSON.stringify(p).replace(/'/g, "&apos;")})'>Editar</button>
+                        <button onclick="deleteProject(${p.id})" class="danger">Excluir</button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function openProjectModal(p = null) {
+            document.getElementById('projectModal').style.display = 'block';
+            if (p) {
+                document.getElementById('projId').value = p.id || '';
+                document.getElementById('projTitle').value = p.title;
+                document.getElementById('projDesc').value = p.description;
+                document.getElementById('projGithub').value = p.githubUrl;
+                document.getElementById('projDemo').value = p.demoUrl;
+                document.getElementById('projStatus').value = p.status;
+                document.getElementById('projImage').value = p.imageUrl;
+                document.getElementById('projTechs').value = p.technologies ? p.technologies.join(', ') : '';
+            } else {
+                document.getElementById('projectForm').reset();
+                document.getElementById('projId').value = '';
+            }
+        }
+
+        window.editProject = function(p) { openProjectModal(p); }
+
+        async function saveProject(e) {
+            e.preventDefault();
+            const id = document.getElementById('projId').value;
+            const techString = document.getElementById('projTechs').value;
+            
+            const body = {
+                title: document.getElementById('projTitle').value,
+                description: document.getElementById('projDesc').value,
+                githubUrl: document.getElementById('projGithub').value,
+                demoUrl: document.getElementById('projDemo').value,
+                status: document.getElementById('projStatus').value,
+                imageUrl: document.getElementById('projImage').value,
+                technologies: techString.split(',').map(t => t.trim()).filter(t => t)
+            };
+
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_BASE}/projects/${id}` : `${API_BASE}/projects`;
+
+            await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            
+            closeModal('projectModal');
+            loadProjects();
+        }
+
+        async function deleteProject(id) {
+            if (!id) return alert('ID não encontrado. Atualize o Java.');
+            if (!confirm('Apagar projeto?')) return;
+            await fetch(`${API_BASE}/projects/${id}`, { method: 'DELETE' });
+            loadProjects();
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProfile();
+            loadSkills();
+            loadProjects();
+        });
+    </script>
 </body>
 </html>

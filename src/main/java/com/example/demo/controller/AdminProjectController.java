@@ -23,14 +23,15 @@ public class AdminProjectController {
 
     @GetMapping
     public List<Project> list() {
-        return projectRepo.findAll().stream().map(e -> new Project(e.getTitle(), e.getDescription(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getTechnologies(), e.getImageUrl())).collect(Collectors.toList());
+        return projectRepo.findAll().stream().map(e -> new Project(e.getId(), e.getTitle(), e.getDescription(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getTechnologies(), e.getImageUrl())).collect(Collectors.toList());
     }
 
     @PostMapping
     public ResponseEntity<Project> create(@Valid @RequestBody Project project) {
         ProjectEntity e = new ProjectEntity(project.getTitle(), project.getDescription(), project.getGithubUrl(), project.getDemoUrl(), project.getStatus(), project.getTechnologies(), project.getImageUrl());
         projectRepo.save(e);
-        return ResponseEntity.created(URI.create("/admin/api/projects")).body(project);
+        Project resp = new Project(e.getId(), e.getTitle(), e.getDescription(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getTechnologies(), e.getImageUrl());
+        return ResponseEntity.created(URI.create("/admin/api/projects")).body(resp);
     }
 
     @PutMapping("/{id}")
@@ -44,6 +45,7 @@ public class AdminProjectController {
             e.setTechnologies(project.getTechnologies());
             e.setImageUrl(project.getImageUrl());
             projectRepo.save(e);
+            project.setId(id);
             return ResponseEntity.ok(project);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
