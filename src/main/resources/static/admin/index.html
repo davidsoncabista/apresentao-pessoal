@@ -15,6 +15,7 @@
                 <button onclick="showTab('profile', this)" class="tab-btn active">Perfil</button>
                 <button onclick="showTab('skills', this)" class="tab-btn">Skills</button>
                 <button onclick="showTab('projects', this)" class="tab-btn">Projetos</button>
+                <button onclick="showTab('articles', this)" class="tab-btn">Artigos</button>
                 <a href="/" target="_blank" class="view-site-btn">Ver Site</a>
             </nav>
         </header>
@@ -70,6 +71,16 @@
                 <div id="projectsList" class="cards-grid">
                     </div>
             </section>
+
+            <section id="articles" class="tab-content">
+              <div class="section-header">
+                   <h2>Gerenciar Artigos</h2>
+                  <button onclick="openArticleModal()" class="add-btn">+ Novo Artigo</button>
+              </div>
+                <div id="articlesList" class="cards-grid">
+                    </div>
+            </section>
+            
         </main>
     </div>
 
@@ -128,6 +139,30 @@
             </form>
         </div>
     </div>
+
+    <div id="articleModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('articleModal')">&times;</span>
+        <h3 id="articleModalTitle">Adicionar/Editar Artigo</h3>
+        <form id="articleForm" onsubmit="saveArticle(event)">
+            <input type="hidden" id="artId">
+            
+            <label>Título:</label>
+            <input type="text" id="artTitle" required>
+            
+            <label>Resumo:</label>
+            <textarea id="artSummary" rows="3"></textarea>
+            
+            <label>Link do Artigo (URL):</label>
+            <input type="url" id="artUrl">
+            
+            <label>Imagem Capa (URL):</label>
+            <input type="url" id="artImage">
+            
+            <button type="submit" class="save-btn">Salvar Artigo</button>
+        </form>
+    </div>
+</div>
 
     <script>
         const API_BASE = '/admin/api';
@@ -334,11 +369,82 @@
             loadProjects();
         }
 
+        // --- ARTIGOS (NOVO CÓDIGO) ---
+        async function loadArticles() {
+            try {
+                const res = await fetch(`${API_BASE}/articles`);
+                const data = await res.json();
+                const list = document.getElementById('articlesList');
+                list.innerHTML = '';
+
+                data.forEach(a => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <strong>${a.title}</strong>
+                        <p style="font-size: 0.9rem; color: #aaa;">${a.summary || ''}</p>
+                        <div class="card-actions">
+                            <button onclick='editArticle(${JSON.stringify(a).replace(/'/g, "&apos;")})'>Editar</button>
+                            <button onclick="deleteArticle(${a.id})" class="danger">Excluir</button>
+                        </div>
+                    `;
+                    list.appendChild(card);
+                });
+            } catch(e) { console.error("Erro ao carregar artigos", e); }
+        }
+
+        function openArticleModal(a = null) {
+            document.getElementById('articleModal').style.display = 'block';
+            if (a) {
+                document.getElementById('artId').value = a.id || '';
+                document.getElementById('artTitle').value = a.title;
+                document.getElementById('artSummary').value = a.summary;
+                document.getElementById('artUrl').value = a.contentUrl;
+                document.getElementById('artImage').value = a.imageUrl;
+            } else {
+                document.getElementById('articleForm').reset();
+                document.getElementById('artId').value = '';
+            }
+        }
+
+        window.editArticle = function(a) { openArticleModal(a); }
+
+        async function saveArticle(e) {
+            e.preventDefault();
+            const id = document.getElementById('artId').value;
+            
+            const body = {
+                title: document.getElementById('artTitle').value,
+                summary: document.getElementById('artSummary').value,
+                contentUrl: document.getElementById('artUrl').value,
+                imageUrl: document.getElementById('artImage').value
+            };
+
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_BASE}/articles/${id}` : `${API_BASE}/articles`;
+
+            await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            
+            closeModal('articleModal');
+            loadArticles();
+        }
+
+        async function deleteArticle(id) {
+            if (!confirm('Apagar artigo?')) return;
+            await fetch(`${API_BASE}/articles/${id}`, { method: 'DELETE' });
+            loadArticles();
+        }
+
         // Inicialização
         document.addEventListener('DOMContentLoaded', () => {
             loadProfile();
             loadSkills();
             loadProjects();
+            loadArticles();
         });
     </script>
 </body>
