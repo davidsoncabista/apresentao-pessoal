@@ -6,25 +6,16 @@ on:
 
 jobs:
   deploy:
-    # MUDANÇA CRUCIAL: Agora usa o runner que instalamos no seu servidor
     runs-on: self-hosted
 
     steps:
-    # 1. Baixa o código novo do GitHub para a pasta do runner
     - name: Checkout do Código
       uses: actions/checkout@v3
 
-    # 2. Roda o script localmente (sem SSH, pois o runner já está lá)
     - name: Executar Setup Script
       run: |
-        # Garante permissão
+        # 1. Dá permissão ao script que ACABOU de ser baixado (na pasta atual)
         chmod +x setup.sh
         
-        # Entra na pasta oficial do projeto (onde o setup.sh opera)
-        cd /opt/portfolio-api
-        
-        # Atualiza o código lá também (garantia extra)
-        git pull origin main
-        
-        # Roda a automação
+        # 2. Executa ele direto (ele sabe onde ir)
         ./setup.sh
