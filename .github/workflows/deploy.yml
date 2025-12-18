@@ -10,7 +10,7 @@ jobs:
 
     steps:
     - name: Checkout do Código
-      uses: actions/checkout@v3
+       working-directory: /opt/portfolio-api
 
     - name: Executar Setup Script
       run: |
