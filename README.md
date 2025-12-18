@@ -98,6 +98,9 @@ chmod +x mvnw
 
 # Executa a aplicação Spring Boot
 ./mvnw spring-boot:run
+
+#Execute para ambiente dev
+./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 A página de status da API estará disponível em `http://localhost:8080/`. Os endpoints da API podem ser acessados a partir dessa base (ex: `http://localhost:8080/profile`).
 
