@@ -1,4 +1,4 @@
-name: Deploy Self-Hosted
+name: Deploy Backend Java
 
 on:
   push:
@@ -9,12 +9,6 @@ jobs:
     runs-on: self-hosted
 
     steps:
-    - name: Checkout do Código
-      uses: actions/checkout@v3
-
-    - name: Executar Setup Script
-      run: |
-           
-      cd /opt/portfolio-api
-      
-            ./setup.sh
+      - name: Executar Script de Deploy Local
+        working-directory: /root/
+        run: ./setup.sh
