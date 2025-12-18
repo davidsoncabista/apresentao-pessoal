@@ -74,7 +74,6 @@
     </plugins>
   </build>
 
-</project>
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-data-redis</artifactId>
@@ -85,3 +84,5 @@
     <artifactId>spring-dotenv</artifactId>
     <version>4.0.0</version>
 </dependency>
+
+</project>
