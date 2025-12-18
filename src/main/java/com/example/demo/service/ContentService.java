@@ -12,7 +12,7 @@ import com.example.demo.repository.ProfileRepository;
 import com.example.demo.repository.ProjectRepository;
 import com.example.demo.repository.SkillRepository;
 import org.springframework.stereotype.Service;
-
+import org.springframework.cache.annotation.Cacheable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +31,8 @@ public class ContentService {
         this.articleRepo = articleRepo;
     }
 
+    
+    @Cacheable(value = "profile")
     public Profile getProfileFallback(Profile defaultProfile) {
         List<ProfileEntity> list = profileRepo.findAll();
         if (list.isEmpty()) return defaultProfile;
@@ -38,18 +40,21 @@ public class ContentService {
         return new Profile(e.getName(), e.getTitle(), e.getSummary(), e.getLinkedinUrl(), e.getGithubUrl(), e.getYoutubeUrl());
     }
 
+    @Cacheable(value = "skills")
     public List<Skill> getSkillsFallback(List<Skill> defaultSkills) {
         List<SkillEntity> list = skillRepo.findAll();
         if (list.isEmpty()) return defaultSkills;
         return list.stream().map(e -> new Skill(e.getName(), e.getProficiency(), e.getCategory(), e.getLogo())).collect(Collectors.toList());
     }
 
+    @Cacheable(value = "projects")
     public List<Project> getProjectsFallback(List<Project> defaultProjects) {
         List<ProjectEntity> list = projectRepo.findAll();
         if (list.isEmpty()) return defaultProjects;
         return list.stream().map(e -> new Project(e.getTitle(), e.getDescription(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getTechnologies(), e.getImageUrl())).collect(Collectors.toList());
     }
 
+    @Cacheable(value = "articles")
     public List<Article> getArticles() {
         return articleRepo.findAll().stream()
             .map(e -> new Article(e.getId(), e.getTitle(), e.getSummary(), e.getContentUrl(), e.getImageUrl()))
