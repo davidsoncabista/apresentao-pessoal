@@ -6,6 +6,7 @@ import com.example.demo.repository.SkillRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.cache.annotation.CacheEvict;
 
 import java.net.URI;
 import java.util.List;
@@ -27,6 +28,7 @@ public class AdminSkillController {
     }
 
     @PostMapping
+    @CacheEvict(value = "skills", allEntries = true)
     public ResponseEntity<Skill> create(@Valid @RequestBody Skill skill) {
         SkillEntity e = new SkillEntity(skill.getName(), skill.getProficiency(), skill.getCategory(), skill.getLogo());
         skillRepo.save(e);
@@ -35,6 +37,7 @@ public class AdminSkillController {
     }
 
     @PutMapping("/{id}")
+    @CacheEvict(value = "skills", allEntries = true)
     public ResponseEntity<Skill> update(@PathVariable Long id, @Valid @RequestBody Skill skill) {
         return skillRepo.findById(id).map(e -> {
             e.setName(skill.getName());
@@ -48,6 +51,7 @@ public class AdminSkillController {
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(value = "skills", allEntries = true)
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (!skillRepo.existsById(id)) return ResponseEntity.notFound().build();
         skillRepo.deleteById(id);

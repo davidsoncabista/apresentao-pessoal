@@ -6,6 +6,7 @@ import com.example.demo.repository.ProfileRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.cache.annotation.CacheEvict;
 
 import java.net.URI;
 import java.util.Optional;
@@ -30,6 +31,7 @@ public class AdminProfileController {
     }
 
     @PostMapping
+    @CacheEvict(value = "profile", allEntries = true)
     public ResponseEntity<Profile> createProfile(@Valid @RequestBody Profile profile) {
         ProfileEntity e = new ProfileEntity(profile.getName(), profile.getTitle(), profile.getSummary(), profile.getLinkedinUrl(), profile.getGithubUrl(), profile.getYoutubeUrl());
         profileRepo.save(e);
@@ -38,6 +40,7 @@ public class AdminProfileController {
     }
 
     @PutMapping("/{id}")
+    @CacheEvict(value = "profile", allEntries = true)
     public ResponseEntity<Profile> updateProfile(@PathVariable Long id, @Valid @RequestBody Profile profile) {
         return profileRepo.findById(id).map(e -> {
             e.setName(profile.getName());
@@ -53,6 +56,7 @@ public class AdminProfileController {
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(value = "profile", allEntries = true)
     public ResponseEntity<Void> deleteProfile(@PathVariable Long id) {
         if (!profileRepo.existsById(id)) return ResponseEntity.notFound().build();
         profileRepo.deleteById(id);

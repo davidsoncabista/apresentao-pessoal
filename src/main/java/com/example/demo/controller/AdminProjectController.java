@@ -6,6 +6,7 @@ import com.example.demo.repository.ProjectRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.cache.annotation.CacheEvict;
 
 import java.net.URI;
 import java.util.List;
@@ -27,6 +28,7 @@ public class AdminProjectController {
     }
 
     @PostMapping
+    @CacheEvict(value = "projects", allEntries = true)
     public ResponseEntity<Project> create(@Valid @RequestBody Project project) {
         ProjectEntity e = new ProjectEntity(project.getTitle(), project.getDescription(), project.getGithubUrl(), project.getDemoUrl(), project.getStatus(), project.getTechnologies(), project.getImageUrl());
         projectRepo.save(e);
@@ -35,6 +37,7 @@ public class AdminProjectController {
     }
 
     @PutMapping("/{id}")
+    @CacheEvict(value = "projects", allEntries = true)
     public ResponseEntity<Project> update(@PathVariable Long id, @Valid @RequestBody Project project) {
         return projectRepo.findById(id).map(e -> {
             e.setTitle(project.getTitle());
@@ -51,6 +54,7 @@ public class AdminProjectController {
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(value = "projects", allEntries = true)
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (!projectRepo.existsById(id)) return ResponseEntity.notFound().build();
         projectRepo.deleteById(id);
