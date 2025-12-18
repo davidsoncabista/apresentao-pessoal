@@ -6,23 +6,25 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    # MUDANÇA CRUCIAL: Agora usa o runner que instalamos no seu servidor
+    runs-on: self-hosted
 
     steps:
+    # 1. Baixa o código novo do GitHub para a pasta do runner
     - name: Checkout do Código
       uses: actions/checkout@v3
 
-    - name: Deploy via SSH
-      uses: appleboy/ssh-action@v1.0.0
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: 22
-        script: |
-          # Entra na pasta e roda o script mágico
-          cd /opt/portfolio-api
-          # Garante permissão de execução
-          chmod +x setup.sh
-          # Executa o deploy
-          ./setup.sh
+    # 2. Roda o script localmente (sem SSH, pois o runner já está lá)
+    - name: Executar Setup Script
+      run: |
+        # Garante permissão
+        chmod +x setup.sh
+        
+        # Entra na pasta oficial do projeto (onde o setup.sh opera)
+        cd /opt/portfolio-api
+        
+        # Atualiza o código lá também (garantia extra)
+        git pull origin main
+        
+        # Roda a automação
+        ./setup.sh
