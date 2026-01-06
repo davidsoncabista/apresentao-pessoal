@@ -28,22 +28,29 @@ public class ImageService {
     }
 
     public List<String> listImages() {
-        List<String> imageUrls = new ArrayList<>();
-        try {
-            Iterable<Result<Item>> results = minioClient.listObjects(
-                ListObjectsArgs.builder().bucket(bucketName).build()
-            );
+    List<String> imageUrls = new ArrayList<>();
+    try {
+        Iterable<Result<Item>> results = minioClient.listObjects(
+            ListObjectsArgs.builder()
+                .bucket(bucketName)
+                .recursive(false) // Garante que ele olhe o nível atual
+                .build()
+        );
 
-            for (Result<Item> result : results) {
-                Item item = result.get();
+        for (Result<Item> result : results) {
+            Item item = result.get();
+            
+            // FILTRO: Só adiciona se NÃO for um diretório e NÃO terminar com "/"
+            if (!item.isDir() && !item.objectName().endsWith("/")) {
                 String url = minioUrl + "/" + bucketName + "/" + item.objectName();
                 imageUrls.add(url);
             }
-        } catch (Exception e) {
-            throw new RuntimeException("Error listing images from MinIO: " + e.getMessage());
         }
-        return imageUrls;
+    } catch (Exception e) {
+        throw new RuntimeException("Error listing images from MinIO: " + e.getMessage());
     }
+    return imageUrls;
+}
 
     public String uploadImage(MultipartFile file) {
         try {
