@@ -48,4 +48,13 @@ public class Profile {
     public void setLinkedinUrl(String linkedinUrl) { this.linkedinUrl = linkedinUrl; }
     public void setGithubUrl(String githubUrl) { this.githubUrl = githubUrl; }
     public void setYoutubeUrl(String youtubeUrl) { this.youtubeUrl = youtubeUrl; }
+
+    @Override
+    public String toString() {
+        return "Profile{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }

@@ -41,4 +41,14 @@ public class Skill {
     public void setProficiency(Integer proficiency) { this.proficiency = proficiency; }
     public void setCategory(String category) { this.category = category; }
     public void setLogo(String logo) { this.logo = logo; }
+
+    @Override
+    public String toString() {
+        return "Skill{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", proficiency=" + proficiency +
+                ", category='" + category + '\'' +
+                '}';
+    }
 }

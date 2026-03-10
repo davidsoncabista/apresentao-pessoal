@@ -54,4 +54,13 @@ public class Project {
     public void setStatus(String status) { this.status = status; }
     public void setTechnologies(List<String> technologies) { this.technologies = technologies; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

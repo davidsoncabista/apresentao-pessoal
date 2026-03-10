@@ -1,9 +1,8 @@
-# Deploy to Render — Quick Instructions
+# Self-Hosted Deployment — Quick Instructions
 
-This file contains the minimal steps and environment variables to deploy the
-`apresentao-pessoal` Spring Boot app to Render.
+This file contains instructions to deploy the `apresentao-pessoal` Spring Boot app in a self-hosted environment.
 
-## Build & Start (Render)
+## Build & Start (Self-Hosted)
 - Build command:
 ```
 ./mvnw -DskipTests package
@@ -13,8 +12,15 @@ This file contains the minimal steps and environment variables to deploy the
 java -jar target/*.jar
 ```
 
-## Local development (no remote DB)
-To run locally without access to the remote MariaDB (useful when developing on your laptop), start with the `dev` profile which uses H2 in-memory DB:
+## Docker Deployment
+Build and run with Docker:
+```bash
+docker build -t portfolio-api .
+docker run -p 8080:8080 --env-file .env portfolio-api
+```
+
+## Local Development (H2 Database)
+To run locally without access to MariaDB (useful when developing), use the `dev` profile:
 
 ```
 ./mvnw -Dspring-boot.run.profiles=dev spring-boot:run
@@ -26,7 +32,7 @@ Or run the jar with:
 java -jar -Dspring.profiles.active=dev target/*.jar
 ```
 
-This avoids the MariaDB connection timeout shown when the remote DB is not reachable.
+This uses H2 in-memory database for development.
 
 ## Environment variables (copy/paste into Render -> Environment)
 Mark the following variables as **Secret** in Render where noted.

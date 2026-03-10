@@ -44,9 +44,8 @@ public class DataInitializer {
 
             profileRepo.save(new ProfileEntity(defaultProfile.getName(), defaultProfile.getTitle(), defaultProfile.getSummary(), defaultProfile.getLinkedinUrl(), defaultProfile.getGithubUrl(), defaultProfile.getYoutubeUrl()));
         }
-        //==============================================================//
-        //                      --- SKILLS ---           
-        //==============================================================//
+
+        // --- SKILLS ---
         if (skillRepo.count() == 0) {
             java.util.List<Skill> skills = Arrays.asList(
                     new Skill("Proxmox HA", 95, "DevOps", "https://cdn.simpleicons.org/proxmox/E53B00/FFFFFF"),
@@ -75,9 +74,8 @@ public class DataInitializer {
                 skillRepo.save(new SkillEntity(s.getName(), s.getProficiency(), s.getCategory(), s.getLogo()));
             }
         }
-        //==============================================================//
-        //                      --- PROJECTS ---            
-        //==============================================================//
+
+        // --- PROJECTS ---
         if (projectRepo.count() == 0) {
             java.util.List<Project> projects = Arrays.asList(
                     new Project("API de Portfólio em Java",
@@ -121,19 +119,16 @@ public class DataInitializer {
                 projectRepo.save(new ProjectEntity(pr.getTitle(), pr.getDescription(), pr.getGithubUrl(), pr.getDemoUrl(), pr.getStatus(), pr.getTechnologies(), pr.getImageUrl()));
             }
         }
-        //==============================================================//
-        //              --- ARTIGOS (NOVO BLOCO) ---
-        //==============================================================//
+
+        // --- ARTIGOS ---
         if (articleRepo.count() == 0) {
-            // Placeholder para imagem se não tiver
             String defaultImg = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=500&q=60";
-            
-            // Dados baseados no seu Frontend (Versão PT)
+
             java.util.List<ArticleEntity> articles = Arrays.asList(
                 new ArticleEntity(
                     "Os Guardiões Silenciosos",
                     "Uma reflexão sobre os componentes e profissionais de infraestrutura que, silenciosamente, garantem a estabilidade e o funcionamento da tecnologia moderna.",
-                    defaultImg, 
+                    defaultImg,
                     "https://www.linkedin.com/pulse/os-guardi%25C3%25B5es-silenciosos-davidson-s-concei%25C3%25A7%25C3%25A3o-nqdvf/"
                 ),
                 new ArticleEntity(
