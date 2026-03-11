@@ -1,10 +1,14 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "articles")
-public class ArticleEntity {
+public class ArticleEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -12,10 +16,10 @@ public class ArticleEntity {
     private String title;
     
     @Column(length = 1000)
-    private String summary; // Pequena descrição
+    private String summary;
     
-    private String imageUrl; // Capa do artigo
-    private String contentUrl; // Link para o artigo (Medium, Dev.to, etc)
+    private String imageUrl;
+    private String contentUrl;
 
     public ArticleEntity() {}
 
