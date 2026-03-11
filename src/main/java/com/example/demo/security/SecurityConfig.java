@@ -12,6 +12,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 public class SecurityConfig {
@@ -25,22 +30,34 @@ public class SecurityConfig {
    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .cors(Customizer.withDefaults()) // <-- ADICIONADO: Habilita o CORS
             .authorizeHttpRequests(authorize -> authorize
-                // Rotas protegidas
                 .requestMatchers("/admin/**").authenticated()
-                // Rotas públicas
                 .requestMatchers("/profile", "/skills", "/projects", "/articles", "/health", "/", "/index.html", "/css/**", "/js/**", "/images/**", "/api/**").permitAll()
                 .anyRequest().permitAll()
             )
-            // MUDANÇA AQUI: Configuração explícita do Login
             .formLogin(form -> form
-                .defaultSuccessUrl("/admin/index.html", true) // Força o redirecionamento para o painel admin
+                .defaultSuccessUrl("/admin/index.html", true)
                 .permitAll()
             )
             .httpBasic(Customizer.withDefaults())
             .csrf(csrf -> csrf.disable());
 
         return http.build();
+    }
+
+    // <-- ADICIONADO: Configuração das regras do CORS
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        // Permite requisições de qualquer origem (ideal para não bloquear seu front-end Next.js)
+        configuration.setAllowedOrigins(Arrays.asList("*")); 
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean
