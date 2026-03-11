@@ -42,7 +42,6 @@ public class ProjectEntity implements Serializable {
         this.imageUrl = imageUrl;
     }
 
-    // getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getTitle() { return title; }
