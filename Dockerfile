@@ -21,6 +21,6 @@ COPY entrypoint.sh .
 RUN dos2unix entrypoint.sh && chmod +x entrypoint.sh
 
 EXPOSE 8080
-
+# O entrypoint.sh será executado quando o container for iniciado
 # Start da aplicação
 ENTRYPOINT ["./entrypoint.sh"]
