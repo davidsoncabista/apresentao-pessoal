@@ -1,11 +1,14 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "project")
-public class ProjectEntity {
+public class ProjectEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
