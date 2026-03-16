@@ -52,21 +52,32 @@ public class ImageService {
     return imageUrls;
 }
 
-    public String uploadImage(MultipartFile file) {
+    public String uploadImage(MultipartFile file, String folder) {
         try {
-            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            String originalFilename = file.getOriginalFilename();
+            if (originalFilename == null) {
+                originalFilename = "file";
+            }
+
+            String objectName;
+            if (folder != null && !folder.trim().isEmpty()) {
+                objectName = folder + "/" + System.currentTimeMillis() + "-" + originalFilename;
+            } else {
+                objectName = System.currentTimeMillis() + "-" + originalFilename;
+            }
+
             InputStream inputStream = file.getInputStream();
 
             minioClient.putObject(
                 io.minio.PutObjectArgs.builder()
                     .bucket(bucketName)
-                    .object(fileName)
+                    .object(objectName)
                     .stream(inputStream, file.getSize(), -1)
                     .contentType(file.getContentType())
                     .build()
             );
 
-            return minioUrl + "/" + bucketName + "/" + fileName;
+            return minioUrl + "/" + bucketName + "/" + objectName;
 
         } catch (Exception e) {
             throw new RuntimeException("Error uploading image to MinIO: " + e.getMessage());
