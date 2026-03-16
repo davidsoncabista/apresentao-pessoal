@@ -23,7 +23,7 @@ public class ProjectEntity implements Serializable {
     private String demoUrl;
     private String status;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "project_technologies", joinColumns = @JoinColumn(name = "project_id"))
     @Column(name = "technology")
     private List<String> technologies;
