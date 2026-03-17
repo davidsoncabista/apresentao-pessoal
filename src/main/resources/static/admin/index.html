@@ -344,40 +344,50 @@
         async function saveProject(e) {
             e.preventDefault();
             const id = document.getElementById('projId').value;
-            const techString = document.getElementById('projTechs').value;
+            const fileInput = document.getElementById('projFile');
             
-            const body = {
+            // 1. Monta o objeto do projeto
+            const projectData = {
                 title: document.getElementById('projTitle').value,
                 description: document.getElementById('projDesc').value,
                 githubUrl: document.getElementById('projGithub').value,
                 demoUrl: document.getElementById('projDemo').value,
                 status: document.getElementById('projStatus').value,
-                imageUrl: document.getElementById('projImage').value,
-                technologies: techString.split(',').map(t => t.trim()).filter(t => t)
+                imageUrl: document.getElementById('projImage').value, // URL oculta
+                technologies: document.getElementById('projTechs').value.split(',').map(t => t.trim()).filter(t => t)
             };
 
+            // 2. Cria o FormData
             const formData = new FormData();
-            formData.append('project', new Blob([JSON.stringify(body)], { type: 'application/json' }));
-            const file = document.getElementById('projFile').files[0];
-            if (file) {
-                formData.append('file', file);
+            
+            // CRITICAL: O Spring Boot precisa do Blob com o type definido
+            formData.append('project', new Blob([JSON.stringify(projectData)], { type: 'application/json' }));
+            
+            // 3. Adiciona o ficheiro se ele existir
+            if (fileInput.files.length > 0) {
+                formData.append('file', fileInput.files[0]);
             }
 
             const method = id ? 'PUT' : 'POST';
             const url = id ? `${API_BASE}/projects/${id}` : `${API_BASE}/projects`;
 
-            await fetch(url, {
-                method: method,
-                body: formData
-            });
-            
-            if (res.ok) {
-                alert('Salvo com sucesso!');
-                closeModal('projectModal');
-                loadProjects();
-            } else {
-                const error = await res.text();
-                alert('Erro ao salvar projeto: ' + error);
+            try {
+                const res = await fetch(url, {
+                    method: method,
+                    body: formData // IMPORTANTE: Nenhum header 'Content-Type' aqui!
+                });
+
+                if (res.ok) {
+                    alert('Salvo com sucesso!');
+                    closeModal('projectModal');
+                    loadProjects();
+                } else {
+                    const errorText = await res.text();
+                    alert('Erro ao salvar: ' + errorText);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro de rede ou no servidor. Verifique o console.');
             }
         }
 
@@ -434,36 +444,47 @@
         async function saveArticle(e) {
             e.preventDefault();
             const id = document.getElementById('artId').value;
+            const fileInput = document.getElementById('artFile');
             
-            const body = {
+            // 1. Monta o objeto do artigo
+            const articleData = {
                 title: document.getElementById('artTitle').value,
                 summary: document.getElementById('artSummary').value,
                 contentUrl: document.getElementById('artUrl').value,
-                imageUrl: document.getElementById('artImage').value
+                imageUrl: document.getElementById('artImage').value // URL oculta
             };
 
+            // 2. Cria o FormData
             const formData = new FormData();
-            formData.append('article', new Blob([JSON.stringify(body)], { type: 'application/json' }));
-            const file = document.getElementById('artFile').files[0];
-            if (file) {
-                formData.append('file', file);
+            
+            // CRITICAL: O Spring Boot precisa do Blob com o type definido
+            formData.append('article', new Blob([JSON.stringify(articleData)], { type: 'application/json' }));
+            
+            // 3. Adiciona o ficheiro se ele existir
+            if (fileInput.files.length > 0) {
+                formData.append('file', fileInput.files[0]);
             }
 
             const method = id ? 'PUT' : 'POST';
             const url = id ? `${API_BASE}/articles/${id}` : `${API_BASE}/articles`;
 
-            await fetch(url, {
-                method: method,
-                body: formData
-            });
-            
-            if (res.ok) {
-                alert('Salvo com sucesso!');
-                closeModal('articleModal');
-                loadArticles();
-            } else {
-                const error = await res.text();
-                alert('Erro ao salvar artigo: ' + error);
+            try {
+                const res = await fetch(url, {
+                    method: method,
+                    body: formData // IMPORTANTE: Nenhum header 'Content-Type' aqui!
+                });
+
+                if (res.ok) {
+                    alert('Salvo com sucesso!');
+                    closeModal('articleModal');
+                    loadArticles();
+                } else {
+                    const errorText = await res.text();
+                    alert('Erro ao salvar: ' + errorText);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro de rede ou no servidor. Verifique o console.');
             }
         }
 
