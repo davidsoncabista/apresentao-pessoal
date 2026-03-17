@@ -31,6 +31,9 @@ public class AdminArticleController {
         String imageUrl = article.getImageUrl();
         if (file != null && !file.isEmpty()) {
             imageUrl = imageService.uploadImage(file, "articles");
+            System.out.println("Artigo criado - Arquivo recebido: " + file.getOriginalFilename() + ", URL gerada: " + imageUrl);
+        } else {
+            System.out.println("Artigo criado - Nenhum arquivo enviado, mantendo URL: " + imageUrl);
         }
         article.setImageUrl(imageUrl);
         return repository.save(article);
@@ -43,6 +46,9 @@ public class AdminArticleController {
                 String imageUrl = novo.getImageUrl();
                 if (file != null && !file.isEmpty()) {
                     imageUrl = imageService.uploadImage(file, "articles");
+                    System.out.println("Artigo atualizado - Arquivo recebido: " + file.getOriginalFilename() + ", URL gerada: " + imageUrl);
+                } else {
+                    System.out.println("Artigo atualizado - Nenhum arquivo enviado, mantendo URL: " + imageUrl);
                 }
                 artigo.setTitle(novo.getTitle());
                 artigo.setSummary(novo.getSummary());

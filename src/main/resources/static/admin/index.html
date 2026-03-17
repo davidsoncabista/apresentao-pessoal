@@ -135,6 +135,7 @@
                 <label>Imagem:</label>
                 <input type="file" id="projFile" accept="image/*">
                 <input type="hidden" id="projImage">
+                <p id="projCurrentImage" style="font-size: 0.9em; color: #666;"></p>
                 
                 <button type="submit" class="save-btn">Salvar</button>
             </form>
@@ -160,6 +161,7 @@
             <label>Imagem Capa:</label>
             <input type="file" id="artFile" accept="image/*">
             <input type="hidden" id="artImage">
+            <p id="artCurrentImage" style="font-size: 0.9em; color: #666;"></p>
             
             <button type="submit" class="save-btn">Salvar Artigo</button>
         </form>
@@ -328,9 +330,11 @@
                 document.getElementById('projStatus').value = p.status;
                 document.getElementById('projImage').value = p.imageUrl;
                 document.getElementById('projTechs').value = p.technologies ? p.technologies.join(', ') : '';
+                document.getElementById('projCurrentImage').textContent = p.imageUrl ? 'Imagem atual: ' + p.imageUrl : 'Imagem atual: Nenhuma';
             } else {
                 document.getElementById('projectForm').reset();
                 document.getElementById('projId').value = '';
+                document.getElementById('projCurrentImage').textContent = '';
             }
             document.getElementById('projFile').value = '';
         }
@@ -367,8 +371,14 @@
                 body: formData
             });
             
-            closeModal('projectModal');
-            loadProjects();
+            if (res.ok) {
+                alert('Salvo com sucesso!');
+                closeModal('projectModal');
+                loadProjects();
+            } else {
+                const error = await res.text();
+                alert('Erro ao salvar projeto: ' + error);
+            }
         }
 
         async function deleteProject(id) {
@@ -410,9 +420,11 @@
                 document.getElementById('artSummary').value = a.summary;
                 document.getElementById('artUrl').value = a.contentUrl;
                 document.getElementById('artImage').value = a.imageUrl;
+                document.getElementById('artCurrentImage').textContent = a.imageUrl ? 'Imagem atual: ' + a.imageUrl : 'Imagem atual: Nenhuma';
             } else {
                 document.getElementById('articleForm').reset();
                 document.getElementById('artId').value = '';
+                document.getElementById('artCurrentImage').textContent = '';
             }
             document.getElementById('artFile').value = '';
         }
@@ -445,8 +457,14 @@
                 body: formData
             });
             
-            closeModal('articleModal');
-            loadArticles();
+            if (res.ok) {
+                alert('Salvo com sucesso!');
+                closeModal('articleModal');
+                loadArticles();
+            } else {
+                const error = await res.text();
+                alert('Erro ao salvar artigo: ' + error);
+            }
         }
 
         async function deleteArticle(id) {

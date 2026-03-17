@@ -37,6 +37,9 @@ public class AdminProjectController {
         String imageUrl = project.getImageUrl();
         if (file != null && !file.isEmpty()) {
             imageUrl = imageService.uploadImage(file, "projects");
+            System.out.println("Projeto criado - Arquivo recebido: " + file.getOriginalFilename() + ", URL gerada: " + imageUrl);
+        } else {
+            System.out.println("Projeto criado - Nenhum arquivo enviado, mantendo URL: " + imageUrl);
         }
         ProjectEntity e = new ProjectEntity(project.getTitle(), project.getDescription(), project.getGithubUrl(), project.getDemoUrl(), project.getStatus(), project.getTechnologies(), imageUrl);
         projectRepo.save(e);
@@ -51,6 +54,9 @@ public class AdminProjectController {
             String imageUrl = project.getImageUrl();
             if (file != null && !file.isEmpty()) {
                 imageUrl = imageService.uploadImage(file, "projects");
+                System.out.println("Projeto atualizado - Arquivo recebido: " + file.getOriginalFilename() + ", URL gerada: " + imageUrl);
+            } else {
+                System.out.println("Projeto atualizado - Nenhum arquivo enviado, mantendo URL: " + imageUrl);
             }
             e.setTitle(project.getTitle());
             e.setDescription(project.getDescription());
