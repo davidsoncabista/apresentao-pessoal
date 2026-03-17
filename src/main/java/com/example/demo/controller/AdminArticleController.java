@@ -47,15 +47,16 @@ public class AdminArticleController {
         return repository.findById(id)
             .map(artigoExistente -> {
                 if (file != null && !file.isEmpty()) {
-                    // Limpeza: Se já existia uma imagem, remove do MinIO
+                    // Remove imagem antiga do MinIO se existir
                     if (artigoExistente.getImageUrl() != null && !artigoExistente.getImageUrl().isEmpty()) {
                         imageService.deleteImage(artigoExistente.getImageUrl());
                     }
-                    // Sobe a nova
-                    String imageUrl = imageService.uploadImage(file, "articles");
-                    artigoExistente.setImageUrl(imageUrl);
+                    // Sobe a nova imagem para a pasta 'articles'
+                    String novaUrl = imageService.uploadImage(file, "articles");
+                    artigoExistente.setImageUrl(novaUrl);
+                    System.out.println("Artigo atualizado - Nova imagem: " + novaUrl);
                 } else {
-                    // Mantém a URL enviada se não houver novo ficheiro
+                    // Mantém a URL atual caso não tenha subido novo arquivo
                     artigoExistente.setImageUrl(novo.getImageUrl());
                 }
                 
@@ -70,7 +71,7 @@ public class AdminArticleController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         return repository.findById(id).map(artigo -> {
-            // Limpeza: Remove a imagem do MinIO antes de apagar o registro
+            // Remove o arquivo do MinIO antes de deletar do banco
             if (artigo.getImageUrl() != null && !artigo.getImageUrl().isEmpty()) {
                 imageService.deleteImage(artigo.getImageUrl());
             }
