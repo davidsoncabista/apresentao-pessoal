@@ -83,4 +83,34 @@ public class ImageService {
             throw new RuntimeException("Error uploading image to MinIO: " + e.getMessage());
         }
     }
+
+    public void deleteImage(String imageUrl) {
+        if (imageUrl == null || imageUrl.isEmpty()) {
+            return;
+        }
+
+        // Regra de segurança: só deletar se for do nosso servidor
+        if (!imageUrl.startsWith(minioUrl)) {
+            System.out.println("Tentativa de deletar imagem de servidor externo ignorada: " + imageUrl);
+            return;
+        }
+
+        try {
+            // Extrair o objectName da URL
+            String objectName = imageUrl.replace(minioUrl + "/" + bucketName + "/", "");
+
+            // Deletar do MinIO
+            minioClient.removeObject(
+                io.minio.RemoveObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(objectName)
+                    .build()
+            );
+
+            System.out.println("Imagem deletada com sucesso: " + objectName);
+
+        } catch (Exception e) {
+            System.out.println("Erro ao deletar imagem do MinIO: " + e.getMessage() + " (URL: " + imageUrl + ")");
+        }
+    }
 }
