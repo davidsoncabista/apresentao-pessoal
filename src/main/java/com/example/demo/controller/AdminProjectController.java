@@ -50,14 +50,22 @@ public class AdminProjectController {
     @PutMapping(value = "/{id}", consumes = {"multipart/form-data"})
     @CacheEvict(value = "projects", allEntries = true)
     public ResponseEntity<Project> update(@PathVariable Long id, @RequestPart("project") @Valid Project project, @RequestPart(value = "file", required = false) MultipartFile file) {
-        return projectRepo.findById(id).map(e -> {
-            String imageUrl = project.getImageUrl();
-            if (file != null && !file.isEmpty()) {
-                imageUrl = imageService.uploadImage(file, "projects");
-                System.out.println("Projeto atualizado - Arquivo recebido: " + file.getOriginalFilename() + ", URL gerada: " + imageUrl);
-            } else {
-                System.out.println("Projeto atualizado - Nenhum arquivo enviado, mantendo URL: " + imageUrl);
-            }
+return projectRepo.findById(id).map(e -> {
+    if (file != null && !file.isEmpty()) {
+        // Se já existia uma imagem antiga, apaga ela do MinIO primeiro
+        if (e.getImageUrl() != null && !e.getImageUrl().isEmpty()) {
+            imageService.deleteImage(e.getImageUrl());
+        }
+        
+        // Sobe a nova imagem
+        String imageUrl = imageService.uploadImage(file, "projects");
+        e.setImageUrl(imageUrl);
+        project.setImageUrl(imageUrl);
+    } else {
+        // Se não enviou arquivo novo, mantém a URL que veio no JSON
+        e.setImageUrl(project.getImageUrl());
+    }
+            // Atualiza os dados do projeto
             e.setTitle(project.getTitle());
             e.setDescription(project.getDescription());
             e.setGithubUrl(project.getGithubUrl());
@@ -72,11 +80,17 @@ public class AdminProjectController {
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
-    @CacheEvict(value = "projects", allEntries = true)
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (!projectRepo.existsById(id)) return ResponseEntity.notFound().build();
+  @DeleteMapping("/{id}")
+@CacheEvict(value = "projects", allEntries = true)
+public ResponseEntity<Void> delete(@PathVariable Long id) {
+    return projectRepo.findById(id).map(p -> {
+        // Se o projeto tinha uma imagem, remove do MinIO
+        if (p.getImageUrl() != null && !p.getImageUrl().isEmpty()) {
+            imageService.deleteImage(p.getImageUrl());
+        }
+        
         projectRepo.deleteById(id);
-        return ResponseEntity.noContent().build();
-    }
+        return ResponseEntity.noContent().<Void>build();
+    }).orElse(ResponseEntity.notFound().build());
+}
 }
