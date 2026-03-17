@@ -27,41 +27,55 @@ public class AdminArticleController {
     }
 
     @PostMapping(consumes = {"multipart/form-data"})
-    public ArticleEntity create(@RequestPart("article") ArticleEntity article, @RequestPart(value = "file", required = false) MultipartFile file) {
-        String imageUrl = article.getImageUrl();
+    public ArticleEntity create(
+            @RequestPart("article") ArticleEntity article,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+        
         if (file != null && !file.isEmpty()) {
-            imageUrl = imageService.uploadImage(file, "articles");
-            System.out.println("Artigo criado - Arquivo recebido: " + file.getOriginalFilename() + ", URL gerada: " + imageUrl);
-        } else {
-            System.out.println("Artigo criado - Nenhum arquivo enviado, mantendo URL: " + imageUrl);
+            String imageUrl = imageService.uploadImage(file, "articles");
+            article.setImageUrl(imageUrl);
         }
-        article.setImageUrl(imageUrl);
         return repository.save(article);
     }
 
     @PutMapping(value = "/{id}", consumes = {"multipart/form-data"})
-    public ResponseEntity<ArticleEntity> update(@PathVariable Long id, @RequestPart("article") ArticleEntity novo, @RequestPart(value = "file", required = false) MultipartFile file) {
+    public ResponseEntity<ArticleEntity> update(
+            @PathVariable Long id, 
+            @RequestPart("article") ArticleEntity novo,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+        
         return repository.findById(id)
-            .map(artigo -> {
-                String imageUrl = novo.getImageUrl();
+            .map(artigoExistente -> {
                 if (file != null && !file.isEmpty()) {
-                    imageUrl = imageService.uploadImage(file, "articles");
-                    System.out.println("Artigo atualizado - Arquivo recebido: " + file.getOriginalFilename() + ", URL gerada: " + imageUrl);
+                    // Limpeza: Se já existia uma imagem, remove do MinIO
+                    if (artigoExistente.getImageUrl() != null && !artigoExistente.getImageUrl().isEmpty()) {
+                        imageService.deleteImage(artigoExistente.getImageUrl());
+                    }
+                    // Sobe a nova
+                    String imageUrl = imageService.uploadImage(file, "articles");
+                    artigoExistente.setImageUrl(imageUrl);
                 } else {
-                    System.out.println("Artigo atualizado - Nenhum arquivo enviado, mantendo URL: " + imageUrl);
+                    // Mantém a URL enviada se não houver novo ficheiro
+                    artigoExistente.setImageUrl(novo.getImageUrl());
                 }
-                artigo.setTitle(novo.getTitle());
-                artigo.setSummary(novo.getSummary());
-                artigo.setImageUrl(imageUrl);
-                artigo.setContentUrl(novo.getContentUrl());
-                return ResponseEntity.ok(repository.save(artigo));
+                
+                artigoExistente.setTitle(novo.getTitle());
+                artigoExistente.setSummary(novo.getSummary());
+                artigoExistente.setContentUrl(novo.getContentUrl());
+                return ResponseEntity.ok(repository.save(artigoExistente));
             })
             .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        repository.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return repository.findById(id).map(artigo -> {
+            // Limpeza: Remove a imagem do MinIO antes de apagar o registro
+            if (artigo.getImageUrl() != null && !artigo.getImageUrl().isEmpty()) {
+                imageService.deleteImage(artigo.getImageUrl());
+            }
+            repository.deleteById(id);
+            return ResponseEntity.noContent().<Void>build();
+        }).orElse(ResponseEntity.notFound().build());
     }
 }

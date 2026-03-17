@@ -28,69 +28,74 @@ public class AdminProjectController {
 
     @GetMapping
     public List<Project> list() {
-        return projectRepo.findAll().stream().map(e -> new Project(e.getId(), e.getTitle(), e.getDescription(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getTechnologies(), e.getImageUrl())).collect(Collectors.toList());
+        return projectRepo.findAll().stream()
+            .map(e -> new Project(e.getId(), e.getTitle(), e.getDescription(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getTechnologies(), e.getImageUrl()))
+            .collect(Collectors.toList());
     }
 
     @PostMapping(consumes = {"multipart/form-data"})
     @CacheEvict(value = "projects", allEntries = true)
-    public ResponseEntity<Project> create(@RequestPart("project") @Valid Project project, @RequestPart(value = "file", required = false) MultipartFile file) {
-        String imageUrl = project.getImageUrl();
+    public ResponseEntity<Project> create(
+            @RequestPart("project") Project project,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+        
+        String urlFinal = project.getImageUrl();
         if (file != null && !file.isEmpty()) {
-            imageUrl = imageService.uploadImage(file, "projects");
-            System.out.println("Projeto criado - Arquivo recebido: " + file.getOriginalFilename() + ", URL gerada: " + imageUrl);
-        } else {
-            System.out.println("Projeto criado - Nenhum arquivo enviado, mantendo URL: " + imageUrl);
+            urlFinal = imageService.uploadImage(file, "projects");
+            System.out.println("Novo projeto - Imagem upada: " + urlFinal);
         }
-        ProjectEntity e = new ProjectEntity(project.getTitle(), project.getDescription(), project.getGithubUrl(), project.getDemoUrl(), project.getStatus(), project.getTechnologies(), imageUrl);
+
+        ProjectEntity e = new ProjectEntity(project.getTitle(), project.getDescription(), project.getGithubUrl(), project.getDemoUrl(), project.getStatus(), project.getTechnologies(), urlFinal);
         projectRepo.save(e);
+        
         Project resp = new Project(e.getId(), e.getTitle(), e.getDescription(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getTechnologies(), e.getImageUrl());
         return ResponseEntity.created(URI.create("/admin/api/projects")).body(resp);
     }
 
     @PutMapping(value = "/{id}", consumes = {"multipart/form-data"})
     @CacheEvict(value = "projects", allEntries = true)
-    public ResponseEntity<Project> update(@PathVariable Long id, @RequestPart("project") @Valid Project project, @RequestPart(value = "file", required = false) MultipartFile file) {
-return projectRepo.findById(id).map(e -> {
-    if (file != null && !file.isEmpty()) {
-        // Se já existia uma imagem antiga, apaga ela do MinIO primeiro
-        if (e.getImageUrl() != null && !e.getImageUrl().isEmpty()) {
-            imageService.deleteImage(e.getImageUrl());
-        }
+    public ResponseEntity<Project> update(
+            @PathVariable Long id, 
+            @RequestPart("project") Project project,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
         
-        // Sobe a nova imagem
-        String imageUrl = imageService.uploadImage(file, "projects");
-        e.setImageUrl(imageUrl);
-        project.setImageUrl(imageUrl);
-    } else {
-        // Se não enviou arquivo novo, mantém a URL que veio no JSON
-        e.setImageUrl(project.getImageUrl());
-    }
-            // Atualiza os dados do projeto
+        return projectRepo.findById(id).map(e -> {
+            if (file != null && !file.isEmpty()) {
+                // Remove imagem antiga se existir
+                if (e.getImageUrl() != null && !e.getImageUrl().isEmpty()) {
+                    imageService.deleteImage(e.getImageUrl());
+                }
+                // Sobe nova imagem
+                String novaUrl = imageService.uploadImage(file, "projects");
+                e.setImageUrl(novaUrl);
+                System.out.println("Projeto atualizado - Nova imagem: " + novaUrl);
+            } else {
+                // Mantém a URL enviada no JSON (caso seja uma edição sem troca de foto)
+                e.setImageUrl(project.getImageUrl());
+            }
+
             e.setTitle(project.getTitle());
             e.setDescription(project.getDescription());
             e.setGithubUrl(project.getGithubUrl());
             e.setDemoUrl(project.getDemoUrl());
             e.setStatus(project.getStatus());
             e.setTechnologies(project.getTechnologies());
-            e.setImageUrl(imageUrl);
+            
             projectRepo.save(e);
             project.setId(id);
-            project.setImageUrl(imageUrl);
             return ResponseEntity.ok(project);
-        }).orElseGet(() -> ResponseEntity.notFound().build());
+        }).orElse(ResponseEntity.notFound().build());
     }
 
-  @DeleteMapping("/{id}")
-@CacheEvict(value = "projects", allEntries = true)
-public ResponseEntity<Void> delete(@PathVariable Long id) {
-    return projectRepo.findById(id).map(p -> {
-        // Se o projeto tinha uma imagem, remove do MinIO
-        if (p.getImageUrl() != null && !p.getImageUrl().isEmpty()) {
-            imageService.deleteImage(p.getImageUrl());
-        }
-        
-        projectRepo.deleteById(id);
-        return ResponseEntity.noContent().<Void>build();
-    }).orElse(ResponseEntity.notFound().build());
-}
+    @DeleteMapping("/{id}")
+    @CacheEvict(value = "projects", allEntries = true)
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        return projectRepo.findById(id).map(p -> {
+            if (p.getImageUrl() != null && !p.getImageUrl().isEmpty()) {
+                imageService.deleteImage(p.getImageUrl());
+            }
+            projectRepo.deleteById(id);
+            return ResponseEntity.noContent().<Void>build();
+        }).orElse(ResponseEntity.notFound().build());
+    }
 }
