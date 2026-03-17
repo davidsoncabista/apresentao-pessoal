@@ -2,8 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.ArticleEntity;
 import com.example.demo.repository.ArticleRepository;
+import com.example.demo.service.ImageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -12,9 +14,11 @@ import java.util.List;
 public class AdminArticleController {
 
     private final ArticleRepository repository;
+    private final ImageService imageService;
 
-    public AdminArticleController(ArticleRepository repository) {
+    public AdminArticleController(ArticleRepository repository, ImageService imageService) {
         this.repository = repository;
+        this.imageService = imageService;
     }
 
     @GetMapping
@@ -22,18 +26,27 @@ public class AdminArticleController {
         return repository.findAll();
     }
 
-    @PostMapping
-    public ArticleEntity create(@RequestBody ArticleEntity article) {
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ArticleEntity create(@RequestPart("article") ArticleEntity article, @RequestPart(value = "file", required = false) MultipartFile file) {
+        String imageUrl = article.getImageUrl();
+        if (file != null && !file.isEmpty()) {
+            imageUrl = imageService.uploadImage(file, "articles");
+        }
+        article.setImageUrl(imageUrl);
         return repository.save(article);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ArticleEntity> update(@PathVariable Long id, @RequestBody ArticleEntity novo) {
+    @PutMapping(value = "/{id}", consumes = {"multipart/form-data"})
+    public ResponseEntity<ArticleEntity> update(@PathVariable Long id, @RequestPart("article") ArticleEntity novo, @RequestPart(value = "file", required = false) MultipartFile file) {
         return repository.findById(id)
             .map(artigo -> {
+                String imageUrl = novo.getImageUrl();
+                if (file != null && !file.isEmpty()) {
+                    imageUrl = imageService.uploadImage(file, "articles");
+                }
                 artigo.setTitle(novo.getTitle());
                 artigo.setSummary(novo.getSummary());
-                artigo.setImageUrl(novo.getImageUrl());
+                artigo.setImageUrl(imageUrl);
                 artigo.setContentUrl(novo.getContentUrl());
                 return ResponseEntity.ok(repository.save(artigo));
             })

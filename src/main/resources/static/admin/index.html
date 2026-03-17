@@ -132,8 +132,9 @@
                 <label>Tecnologias (separadas por vírgula):</label>
                 <input type="text" id="projTechs" placeholder="Java, Spring Boot, Docker">
                 
-                <label>Imagem URL:</label>
-                <input type="url" id="projImage">
+                <label>Imagem:</label>
+                <input type="file" id="projFile" accept="image/*">
+                <input type="hidden" id="projImage">
                 
                 <button type="submit" class="save-btn">Salvar</button>
             </form>
@@ -156,8 +157,9 @@
             <label>Link do Artigo (URL):</label>
             <input type="url" id="artUrl">
             
-            <label>Imagem Capa (URL):</label>
-            <input type="url" id="artImage">
+            <label>Imagem Capa:</label>
+            <input type="file" id="artFile" accept="image/*">
+            <input type="hidden" id="artImage">
             
             <button type="submit" class="save-btn">Salvar Artigo</button>
         </form>
@@ -330,6 +332,7 @@
                 document.getElementById('projectForm').reset();
                 document.getElementById('projId').value = '';
             }
+            document.getElementById('projFile').value = '';
         }
 
         window.editProject = function(p) { openProjectModal(p); }
@@ -349,13 +352,19 @@
                 technologies: techString.split(',').map(t => t.trim()).filter(t => t)
             };
 
+            const formData = new FormData();
+            formData.append('project', new Blob([JSON.stringify(body)], { type: 'application/json' }));
+            const file = document.getElementById('projFile').files[0];
+            if (file) {
+                formData.append('file', file);
+            }
+
             const method = id ? 'PUT' : 'POST';
             const url = id ? `${API_BASE}/projects/${id}` : `${API_BASE}/projects`;
 
             await fetch(url, {
                 method: method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
+                body: formData
             });
             
             closeModal('projectModal');
@@ -405,6 +414,7 @@
                 document.getElementById('articleForm').reset();
                 document.getElementById('artId').value = '';
             }
+            document.getElementById('artFile').value = '';
         }
 
         window.editArticle = function(a) { openArticleModal(a); }
@@ -420,13 +430,19 @@
                 imageUrl: document.getElementById('artImage').value
             };
 
+            const formData = new FormData();
+            formData.append('article', new Blob([JSON.stringify(body)], { type: 'application/json' }));
+            const file = document.getElementById('artFile').files[0];
+            if (file) {
+                formData.append('file', file);
+            }
+
             const method = id ? 'PUT' : 'POST';
             const url = id ? `${API_BASE}/articles/${id}` : `${API_BASE}/articles`;
 
             await fetch(url, {
                 method: method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
+                body: formData
             });
             
             closeModal('articleModal');

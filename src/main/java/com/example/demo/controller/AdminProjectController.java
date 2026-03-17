@@ -3,9 +3,11 @@ package com.example.demo.controller;
 import com.example.demo.Project;
 import com.example.demo.entity.ProjectEntity;
 import com.example.demo.repository.ProjectRepository;
+import com.example.demo.service.ImageService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.cache.annotation.CacheEvict;
 
 import java.net.URI;
@@ -17,9 +19,11 @@ import java.util.stream.Collectors;
 public class AdminProjectController {
 
     private final ProjectRepository projectRepo;
+    private final ImageService imageService;
 
-    public AdminProjectController(ProjectRepository projectRepo) {
+    public AdminProjectController(ProjectRepository projectRepo, ImageService imageService) {
         this.projectRepo = projectRepo;
+        this.imageService = imageService;
     }
 
     @GetMapping
@@ -27,28 +31,37 @@ public class AdminProjectController {
         return projectRepo.findAll().stream().map(e -> new Project(e.getId(), e.getTitle(), e.getDescription(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getTechnologies(), e.getImageUrl())).collect(Collectors.toList());
     }
 
-    @PostMapping
+    @PostMapping(consumes = {"multipart/form-data"})
     @CacheEvict(value = "projects", allEntries = true)
-    public ResponseEntity<Project> create(@Valid @RequestBody Project project) {
-        ProjectEntity e = new ProjectEntity(project.getTitle(), project.getDescription(), project.getGithubUrl(), project.getDemoUrl(), project.getStatus(), project.getTechnologies(), project.getImageUrl());
+    public ResponseEntity<Project> create(@RequestPart("project") @Valid Project project, @RequestPart(value = "file", required = false) MultipartFile file) {
+        String imageUrl = project.getImageUrl();
+        if (file != null && !file.isEmpty()) {
+            imageUrl = imageService.uploadImage(file, "projects");
+        }
+        ProjectEntity e = new ProjectEntity(project.getTitle(), project.getDescription(), project.getGithubUrl(), project.getDemoUrl(), project.getStatus(), project.getTechnologies(), imageUrl);
         projectRepo.save(e);
         Project resp = new Project(e.getId(), e.getTitle(), e.getDescription(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getTechnologies(), e.getImageUrl());
         return ResponseEntity.created(URI.create("/admin/api/projects")).body(resp);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = {"multipart/form-data"})
     @CacheEvict(value = "projects", allEntries = true)
-    public ResponseEntity<Project> update(@PathVariable Long id, @Valid @RequestBody Project project) {
+    public ResponseEntity<Project> update(@PathVariable Long id, @RequestPart("project") @Valid Project project, @RequestPart(value = "file", required = false) MultipartFile file) {
         return projectRepo.findById(id).map(e -> {
+            String imageUrl = project.getImageUrl();
+            if (file != null && !file.isEmpty()) {
+                imageUrl = imageService.uploadImage(file, "projects");
+            }
             e.setTitle(project.getTitle());
             e.setDescription(project.getDescription());
             e.setGithubUrl(project.getGithubUrl());
             e.setDemoUrl(project.getDemoUrl());
             e.setStatus(project.getStatus());
             e.setTechnologies(project.getTechnologies());
-            e.setImageUrl(project.getImageUrl());
+            e.setImageUrl(imageUrl);
             projectRepo.save(e);
             project.setId(id);
+            project.setImageUrl(imageUrl);
             return ResponseEntity.ok(project);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
