@@ -33,20 +33,14 @@ public class SecurityConfig {
         http
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(authorize -> authorize
-                // 1. Libera a LEITURA dos projetos e artigos para o público (Vercel/Local)
-                .requestMatchers(HttpMethod.GET, "/admin/api/projects", "/admin/api/articles").permitAll()
-                .requestMatchers(HttpMethod.GET, "/skills", "/api/gallery/**", "/health").permitAll()
+                // 1. ADICIONE ESTA LINHA: Libera a leitura (GET) das listas mesmo estando no /admin
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/admin/api/projects", "/admin/api/skills", "/admin/api/articles").permitAll()
                 
-                // 2. Exige AUTENTICAÇÃO para POST, PUT e DELETE (Criação e Edição)
-                .requestMatchers(HttpMethod.POST, "/admin/api/**").authenticated()
-                .requestMatchers(HttpMethod.PUT, "/admin/api/**").authenticated()
-                .requestMatchers(HttpMethod.DELETE, "/admin/api/**").authenticated()
-                
-                // 3. Protege as páginas HTML do Painel Admin
+                // 2. MANTÉM ESTA LINHA: Bloqueia POST, PUT e DELETE do /admin (exige senha)
                 .requestMatchers("/admin/**").authenticated()
                 
-                // 4. Libera o restante (CSS, JS, Index)
-                .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/images/**", "/api/**").permitAll()
+                // 3. MANTÉM O RESTO IGUAL
+                .requestMatchers("/profile", "/skills", "/projects", "/articles", "/health", "/", "/index.html", "/css/**", "/js/**", "/images/**", "/api/**").permitAll()
                 .anyRequest().permitAll()
             )
             .formLogin(form -> form
