@@ -30,9 +30,15 @@ public class SecurityConfig {
    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .cors(Customizer.withDefaults()) // <-- ADICIONADO: Habilita o CORS
+            .cors(Customizer.withDefaults())
             .authorizeHttpRequests(authorize -> authorize
+                // 1. ADICIONE ESTA LINHA: Libera a leitura (GET) das listas mesmo estando no /admin
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/admin/api/projects", "/admin/api/skills", "/admin/api/articles").permitAll()
+                
+                // 2. MANTÉM ESTA LINHA: Bloqueia POST, PUT e DELETE do /admin (exige senha)
                 .requestMatchers("/admin/**").authenticated()
+                
+                // 3. MANTÉM O RESTO IGUAL
                 .requestMatchers("/profile", "/skills", "/projects", "/articles", "/health", "/", "/index.html", "/css/**", "/js/**", "/images/**", "/api/**").permitAll()
                 .anyRequest().permitAll()
             )
