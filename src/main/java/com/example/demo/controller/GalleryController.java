@@ -20,22 +20,22 @@ public class GalleryController {
 
     @GetMapping
     public List<String> getGalleryImages() {
-        return imageService.listImages();
+        // AQUI ESTÁ O SEGREDO: Avisar para listar dentro da pasta "gallery"
+        return imageService.listImages("gallery");
     }
 
-    // Atualizado: Agora recebe múltiplos arquivos (List<MultipartFile>)
     @PostMapping("/upload")
     public ResponseEntity<List<String>> uploadGalleryImages(@RequestParam("files") List<MultipartFile> files) {
         List<String> urls = new ArrayList<>();
         for (MultipartFile file : files) {
             if (!file.isEmpty()) {
+                // AQUI SALVA NA PASTA "gallery"
                 urls.add(imageService.uploadImage(file, "gallery"));
             }
         }
         return ResponseEntity.ok(urls);
     }
 
-    // Novo: Rota para deletar imagem recebendo a URL
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteGalleryImage(@RequestParam("url") String url) {
         imageService.deleteImage(url);
