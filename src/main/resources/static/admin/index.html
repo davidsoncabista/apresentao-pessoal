@@ -488,7 +488,7 @@
         async function loadGallery() {
             try {
                 // Atenção: A rota da galeria não tem o /admin na frente
-                const res = await fetch('/api/gallery');
+                const res = await fetch('/api/gallery', { cache: 'no-store' });
                 const urls = await res.json();
                 const list = document.getElementById('galleryList');
                 list.innerHTML = '';
