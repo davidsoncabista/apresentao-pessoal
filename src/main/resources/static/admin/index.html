@@ -16,6 +16,8 @@
                 <button onclick="showTab('skills', this)" class="tab-btn">Skills</button>
                 <button onclick="showTab('projects', this)" class="tab-btn">Projetos</button>
                 <button onclick="showTab('articles', this)" class="tab-btn">Artigos</button>
+                <button onclick="showTab('gallery', this)" class="tab-btn">Galeria</button>
+                <button onclick="showTab('contact', this)" class="tab-btn">Contato</button>
                 <a href="/" target="_blank" class="view-site-btn">Ver Site</a>
             </nav>
         </header>
@@ -80,6 +82,21 @@
                 <div id="articlesList" class="cards-grid">
                     </div>
             </section>
+
+            <section id="gallery" class="tab-content">
+              <div class="section-header">
+                  <h2>Gerenciar Galeria</h2>
+                  <input type="file" id="galleryFiles" multiple accept="image/*" style="display: none;" onchange="uploadGalleryImages()">
+                 <button onclick="document.getElementById('galleryFiles').click()" class="add-btn">+ Upload de Fotos</button>
+             </div>
+                 <div id="galleryList" class="cards-grid">
+        </div>
+            </section>
+
+            <section id="contact" class="tab-content">
+                <h2>Contato</h2>
+                <p>Aqui você pode configurar as informações de contato ou mensagens recebidas (futuro recurso).</p>
+            </section>
             
         </main>
     </div>
@@ -135,7 +152,6 @@
                 <label>Imagem:</label>
                 <input type="file" id="projFile" accept="image/*">
                 <input type="hidden" id="projImage">
-                <p id="projCurrentImage" style="font-size: 0.9em; color: #666;"></p>
                 
                 <button type="submit" class="save-btn">Salvar</button>
             </form>
@@ -161,7 +177,6 @@
             <label>Imagem Capa:</label>
             <input type="file" id="artFile" accept="image/*">
             <input type="hidden" id="artImage">
-            <p id="artCurrentImage" style="font-size: 0.9em; color: #666;"></p>
             
             <button type="submit" class="save-btn">Salvar Artigo</button>
         </form>
@@ -330,11 +345,9 @@
                 document.getElementById('projStatus').value = p.status;
                 document.getElementById('projImage').value = p.imageUrl;
                 document.getElementById('projTechs').value = p.technologies ? p.technologies.join(', ') : '';
-                document.getElementById('projCurrentImage').textContent = p.imageUrl ? 'Imagem atual: ' + p.imageUrl : 'Imagem atual: Nenhuma';
             } else {
                 document.getElementById('projectForm').reset();
                 document.getElementById('projId').value = '';
-                document.getElementById('projCurrentImage').textContent = '';
             }
             document.getElementById('projFile').value = '';
         }
@@ -344,50 +357,40 @@
         async function saveProject(e) {
             e.preventDefault();
             const id = document.getElementById('projId').value;
-            const fileInput = document.getElementById('projFile');
+            const techString = document.getElementById('projTechs').value;
             
-            // 1. Monta o objeto do projeto
-            const projectData = {
+            const body = {
                 title: document.getElementById('projTitle').value,
                 description: document.getElementById('projDesc').value,
                 githubUrl: document.getElementById('projGithub').value,
                 demoUrl: document.getElementById('projDemo').value,
                 status: document.getElementById('projStatus').value,
-                imageUrl: document.getElementById('projImage').value, // URL oculta
-                technologies: document.getElementById('projTechs').value.split(',').map(t => t.trim()).filter(t => t)
+                imageUrl: document.getElementById('projImage').value,
+                technologies: techString.split(',').map(t => t.trim()).filter(t => t)
             };
 
-            // 2. Cria o FormData
             const formData = new FormData();
-            
-            // CRITICAL: O Spring Boot precisa do Blob com o type definido
-            formData.append('project', new Blob([JSON.stringify(projectData)], { type: 'application/json' }));
-            
-            // 3. Adiciona o ficheiro se ele existir
-            if (fileInput.files.length > 0) {
-                formData.append('file', fileInput.files[0]);
+            formData.append('project', new Blob([JSON.stringify(body)], { type: 'application/json' }));
+            const file = document.getElementById('projFile').files[0];
+            if (file) {
+                formData.append('file', file);
             }
 
             const method = id ? 'PUT' : 'POST';
             const url = id ? `${API_BASE}/projects/${id}` : `${API_BASE}/projects`;
 
-            try {
-                const res = await fetch(url, {
-                    method: method,
-                    body: formData // IMPORTANTE: Nenhum header 'Content-Type' aqui!
-                });
-
-                if (res.ok) {
-                    alert('Salvo com sucesso!');
-                    closeModal('projectModal');
-                    loadProjects();
-                } else {
-                    const errorText = await res.text();
-                    alert('Erro ao salvar: ' + errorText);
-                }
-            } catch (err) {
-                console.error(err);
-                alert('Erro de rede ou no servidor. Verifique o console.');
+            await fetch(url, {
+                method: method,
+                body: formData
+            });
+            
+            if (res.ok) {
+                alert('Salvo com sucesso!');
+                closeModal('projectModal');
+                loadProjects();
+            } else {
+                const error = await res.text();
+                alert('Erro ao salvar projeto: ' + error);
             }
         }
 
@@ -430,11 +433,9 @@
                 document.getElementById('artSummary').value = a.summary;
                 document.getElementById('artUrl').value = a.contentUrl;
                 document.getElementById('artImage').value = a.imageUrl;
-                document.getElementById('artCurrentImage').textContent = a.imageUrl ? 'Imagem atual: ' + a.imageUrl : 'Imagem atual: Nenhuma';
             } else {
                 document.getElementById('articleForm').reset();
                 document.getElementById('artId').value = '';
-                document.getElementById('artCurrentImage').textContent = '';
             }
             document.getElementById('artFile').value = '';
         }
@@ -444,47 +445,36 @@
         async function saveArticle(e) {
             e.preventDefault();
             const id = document.getElementById('artId').value;
-            const fileInput = document.getElementById('artFile');
             
-            // 1. Monta o objeto do artigo
-            const articleData = {
+            const body = {
                 title: document.getElementById('artTitle').value,
                 summary: document.getElementById('artSummary').value,
                 contentUrl: document.getElementById('artUrl').value,
-                imageUrl: document.getElementById('artImage').value // URL oculta
+                imageUrl: document.getElementById('artImage').value
             };
 
-            // 2. Cria o FormData
             const formData = new FormData();
-            
-            // CRITICAL: O Spring Boot precisa do Blob com o type definido
-            formData.append('article', new Blob([JSON.stringify(articleData)], { type: 'application/json' }));
-            
-            // 3. Adiciona o ficheiro se ele existir
-            if (fileInput.files.length > 0) {
-                formData.append('file', fileInput.files[0]);
+            formData.append('article', new Blob([JSON.stringify(body)], { type: 'application/json' }));
+            const file = document.getElementById('artFile').files[0];
+            if (file) {
+                formData.append('file', file);
             }
 
             const method = id ? 'PUT' : 'POST';
             const url = id ? `${API_BASE}/articles/${id}` : `${API_BASE}/articles`;
 
-            try {
-                const res = await fetch(url, {
-                    method: method,
-                    body: formData // IMPORTANTE: Nenhum header 'Content-Type' aqui!
-                });
-
-                if (res.ok) {
-                    alert('Salvo com sucesso!');
-                    closeModal('articleModal');
-                    loadArticles();
-                } else {
-                    const errorText = await res.text();
-                    alert('Erro ao salvar: ' + errorText);
-                }
-            } catch (err) {
-                console.error(err);
-                alert('Erro de rede ou no servidor. Verifique o console.');
+            await fetch(url, {
+                method: method,
+                body: formData
+            });
+            
+            if (res.ok) {
+                alert('Salvo com sucesso!');
+                closeModal('articleModal');
+                loadArticles();
+            } else {
+                const error = await res.text();
+                alert('Erro ao salvar artigo: ' + error);
             }
         }
 
@@ -494,12 +484,85 @@
             loadArticles();
         }
 
+        // --- GALERIA ---
+        async function loadGallery() {
+            try {
+                // Atenção: A rota da galeria não tem o /admin na frente
+                const res = await fetch('/api/gallery');
+                const urls = await res.json();
+                const list = document.getElementById('galleryList');
+                list.innerHTML = '';
+
+                urls.forEach(url => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    // Criamos um card focado em mostrar a imagem
+                    card.innerHTML = `
+                        <img src="${url}" alt="Foto da Galeria" style="width: 100%; height: 150px; object-fit: cover; border-radius: 4px; margin-bottom: 10px;">
+                        <div class="card-actions">
+                            <button onclick="deleteGalleryImage('${url}')" class="danger" style="width: 100%;">Excluir</button>
+                        </div>
+                    `;
+                    list.appendChild(card);
+                });
+            } catch (e) { console.error("Erro ao carregar galeria", e); }
+        }
+
+        async function uploadGalleryImages() {
+            const fileInput = document.getElementById('galleryFiles');
+            if (fileInput.files.length === 0) return;
+
+            const formData = new FormData();
+            // Pega todos os arquivos selecionados e joga no FormData
+            for (let i = 0; i < fileInput.files.length; i++) {
+                formData.append('files', fileInput.files[i]); 
+            }
+
+            try {
+                const res = await fetch('/api/gallery/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (res.ok) {
+                    alert('Fotos enviadas com sucesso!');
+                    loadGallery();
+                } else {
+                    alert('Erro ao enviar fotos.');
+                }
+            } catch (err) {
+                console.error('Erro no upload', err);
+                alert('Erro de conexão ao enviar fotos.');
+            } finally {
+                fileInput.value = ''; // Limpa o input para permitir enviar as mesmas fotos de novo se quiser
+            }
+        }
+
+        async function deleteGalleryImage(url) {
+            if (!confirm('Apagar esta foto permanentemente?')) return;
+            try {
+                // Passa a URL como parâmetro (query string)
+                const res = await fetch(`/api/gallery/delete?url=${encodeURIComponent(url)}`, { 
+                    method: 'DELETE' 
+                });
+                
+                if (res.ok) {
+                    loadGallery();
+                } else {
+                    alert('Erro ao apagar a foto.');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
         // Inicialização
         document.addEventListener('DOMContentLoaded', () => {
             loadProfile();
             loadSkills();
             loadProjects();
             loadArticles();
+            loadGallery();
         });
     </script>
 </body>
