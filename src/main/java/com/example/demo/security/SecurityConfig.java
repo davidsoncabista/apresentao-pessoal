@@ -65,7 +65,10 @@ public class SecurityConfig {
             "http://192.168.0.13:3000", 
             "http://davidson.dev.br", 
             "https://davidson.dev.br",
-            "https://portfolio-olive-rho.vercel.app"
+            "https://portfolio-olive-rho.vercel.app",
+            "https://api2.davidson.dev.br",
+            "http://localhost:3000",
+            "https://api.davidson.dev.br"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
