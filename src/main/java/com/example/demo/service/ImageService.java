@@ -27,30 +27,39 @@ public class ImageService {
         this.minioClient = minioClient;
     }
 
-    public List<String> listImages() {
-    List<String> imageUrls = new ArrayList<>();
-    try {
-        Iterable<Result<Item>> results = minioClient.listObjects(
-            ListObjectsArgs.builder()
-                .bucket(bucketName)
-                .recursive(false) // Garante que ele olhe o nível atual
-                .build()
-        );
+public List<String> listImages(String folder) {
+        List<String> imageUrls = new ArrayList<>();
+        try {
+            // Se tiver uma pasta, adiciona a barra, senão busca na raiz
+            String prefix = (folder != null && !folder.trim().isEmpty()) ? folder + "/" : "";
 
-        for (Result<Item> result : results) {
-            Item item = result.get();
-            
-            // FILTRO: Só adiciona se NÃO for um diretório e NÃO terminar com "/"
-            if (!item.isDir() && !item.objectName().endsWith("/")) {
-                String url = minioUrl + "/" + bucketName + "/" + item.objectName();
-                imageUrls.add(url);
+            Iterable<Result<Item>> results = minioClient.listObjects(
+                ListObjectsArgs.builder()
+                    .bucket(bucketName)
+                    .prefix(prefix) // <-- Agora o MinIO sabe em qual pasta procurar
+                    .recursive(false) 
+                    .build()
+            );
+
+            for (Result<Item> result : results) {
+                Item item = result.get();
+                
+                // FILTRO: Só adiciona se NÃO for um diretório e NÃO terminar com "/"
+                if (!item.isDir() && !item.objectName().endsWith("/")) {
+                    String url = minioUrl + "/" + bucketName + "/" + item.objectName();
+                    imageUrls.add(url);
+                }
             }
+        } catch (Exception e) {
+            throw new RuntimeException("Error listing images from MinIO: " + e.getMessage());
         }
-    } catch (Exception e) {
-        throw new RuntimeException("Error listing images from MinIO: " + e.getMessage());
+        return imageUrls;
     }
-    return imageUrls;
-}
+// Sobrecarga de método: lista os arquivos da raiz caso nenhuma pasta seja especificada
+    public List<String> listImages() {
+        return listImages(null);
+    }
+    
 
     public String uploadImage(MultipartFile file, String folder) {
         try {
