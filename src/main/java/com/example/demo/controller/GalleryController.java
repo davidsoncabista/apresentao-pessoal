@@ -1,13 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.service.ImageService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -25,8 +23,22 @@ public class GalleryController {
         return imageService.listImages();
     }
 
+    // Atualizado: Agora recebe múltiplos arquivos (List<MultipartFile>)
     @PostMapping("/upload")
-    public String uploadGalleryImage(@RequestParam("file") MultipartFile file) {
-        return imageService.uploadImage(file, "gallery");
+    public ResponseEntity<List<String>> uploadGalleryImages(@RequestParam("files") List<MultipartFile> files) {
+        List<String> urls = new ArrayList<>();
+        for (MultipartFile file : files) {
+            if (!file.isEmpty()) {
+                urls.add(imageService.uploadImage(file, "gallery"));
+            }
+        }
+        return ResponseEntity.ok(urls);
+    }
+
+    // Novo: Rota para deletar imagem recebendo a URL
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteGalleryImage(@RequestParam("url") String url) {
+        imageService.deleteImage(url);
+        return ResponseEntity.noContent().build();
     }
 }

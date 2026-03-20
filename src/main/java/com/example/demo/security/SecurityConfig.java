@@ -33,13 +33,17 @@ public class SecurityConfig {
         http
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(authorize -> authorize
-                // 1. ADICIONE ESTA LINHA: Libera a leitura (GET) das listas mesmo estando no /admin
-                .requestMatchers(org.springframework.http.HttpMethod.GET, "/admin/api/projects", "/admin/api/skills", "/admin/api/articles").permitAll()
+                // 1. Libera a leitura (GET) das listas mesmo estando no /admin
+                .requestMatchers(HttpMethod.GET, "/admin/api/projects", "/admin/api/skills", "/admin/api/articles").permitAll()
                 
-                // 2. MANTÉM ESTA LINHA: Bloqueia POST, PUT e DELETE do /admin (exige senha)
+                // 2. ADICIONE ESTAS DUAS LINHAS: Exige senha para enviar e apagar fotos da Galeria
+                .requestMatchers(HttpMethod.POST, "/api/gallery/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/api/gallery/**").authenticated()
+                
+                // 3. MANTÉM ESTA LINHA: Bloqueia todo o resto do /admin (exige senha)
                 .requestMatchers("/admin/**").authenticated()
                 
-                // 3. MANTÉM O RESTO IGUAL
+                // 4. MANTÉM O RESTO IGUAL
                 .requestMatchers("/profile", "/skills", "/projects", "/articles", "/health", "/", "/index.html", "/css/**", "/js/**", "/images/**", "/api/**").permitAll()
                 .anyRequest().permitAll()
             )
