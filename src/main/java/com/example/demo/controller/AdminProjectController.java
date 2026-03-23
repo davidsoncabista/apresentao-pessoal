@@ -28,8 +28,13 @@ public class AdminProjectController {
 
     @GetMapping
     public List<Project> list() {
-        return projectRepo.findAll().stream()
-            .map(e -> new Project(e.getId(), e.getTitle(), e.getDescription(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getTechnologies(), e.getImageUrl()))
+        // Usa o novo método ordenado
+        return projectRepo.findAllByOrderByOrderIndexAsc().stream()
+            .map(e -> {
+                Project p = new Project(e.getId(), e.getTitle(), e.getDescription(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getTechnologies(), e.getImageUrl());
+                p.setOrderIndex(e.getOrderIndex());
+                return p;
+            })
             .collect(Collectors.toList());
     }
 
@@ -42,13 +47,18 @@ public class AdminProjectController {
         String urlFinal = project.getImageUrl();
         if (file != null && !file.isEmpty()) {
             urlFinal = imageService.uploadImage(file, "projects");
-            System.out.println("Novo projeto - Imagem upada: " + urlFinal);
         }
 
         ProjectEntity e = new ProjectEntity(project.getTitle(), project.getDescription(), project.getGithubUrl(), project.getDemoUrl(), project.getStatus(), project.getTechnologies(), urlFinal);
+        
+        if (project.getOrderIndex() != null) {
+            e.setOrderIndex(project.getOrderIndex());
+        }
+
         projectRepo.save(e);
         
         Project resp = new Project(e.getId(), e.getTitle(), e.getDescription(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getTechnologies(), e.getImageUrl());
+        resp.setOrderIndex(e.getOrderIndex());
         return ResponseEntity.created(URI.create("/admin/api/projects")).body(resp);
     }
 
@@ -61,16 +71,12 @@ public class AdminProjectController {
         
         return projectRepo.findById(id).map(e -> {
             if (file != null && !file.isEmpty()) {
-                // Remove imagem antiga se existir
                 if (e.getImageUrl() != null && !e.getImageUrl().isEmpty()) {
                     imageService.deleteImage(e.getImageUrl());
                 }
-                // Sobe nova imagem
                 String novaUrl = imageService.uploadImage(file, "projects");
                 e.setImageUrl(novaUrl);
-                System.out.println("Projeto atualizado - Nova imagem: " + novaUrl);
             } else {
-                // Mantém a URL enviada no JSON (caso seja uma edição sem troca de foto)
                 e.setImageUrl(project.getImageUrl());
             }
 
@@ -80,9 +86,13 @@ public class AdminProjectController {
             e.setDemoUrl(project.getDemoUrl());
             e.setStatus(project.getStatus());
             e.setTechnologies(project.getTechnologies());
+            if (project.getOrderIndex() != null) {
+                e.setOrderIndex(project.getOrderIndex());
+            }
             
             projectRepo.save(e);
             project.setId(id);
+            project.setOrderIndex(e.getOrderIndex());
             return ResponseEntity.ok(project);
         }).orElse(ResponseEntity.notFound().build());
     }
@@ -97,5 +107,23 @@ public class AdminProjectController {
             projectRepo.deleteById(id);
             return ResponseEntity.noContent().<Void>build();
         }).orElse(ResponseEntity.notFound().build());
+    }
+
+    // --- CLASSE E ENDPOINT PARA REORDENAR ---
+    public static class OrderUpdate {
+        public Long id;
+        public Integer orderIndex;
+    }
+
+    @PutMapping("/reorder")
+    @CacheEvict(value = "projects", allEntries = true)
+    public ResponseEntity<Void> reorder(@RequestBody List<OrderUpdate> updates) {
+        for (OrderUpdate update : updates) {
+            projectRepo.findById(update.id).ifPresent(p -> {
+                p.setOrderIndex(update.orderIndex);
+                projectRepo.save(p);
+            });
+        }
+        return ResponseEntity.ok().build();
     }
 }
