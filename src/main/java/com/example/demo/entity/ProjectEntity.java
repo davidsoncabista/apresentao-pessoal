@@ -30,6 +30,10 @@ public class ProjectEntity implements Serializable {
 
     private String imageUrl;
 
+    @Column(name = "ordem")
+    private Integer orderIndex = 0;
+    
+
     public ProjectEntity() {}
 
     public ProjectEntity(String title, String description, String githubUrl, String demoUrl, String status, List<String> technologies, String imageUrl) {
@@ -58,4 +62,6 @@ public class ProjectEntity implements Serializable {
     public void setTechnologies(List<String> technologies) { this.technologies = technologies; }
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public Integer getOrderIndex() { return orderIndex; }
+    public void setOrderIndex(Integer orderIndex) { this.orderIndex = orderIndex; }
 }

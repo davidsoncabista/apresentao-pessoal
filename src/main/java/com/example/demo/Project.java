@@ -19,6 +19,7 @@ public class Project implements Serializable {
     private String status;
     private List<String> technologies;
     private String imageUrl;
+    private Integer orderIndex = 0;
 
     public Project() {}
 
@@ -56,7 +57,8 @@ public class Project implements Serializable {
     public void setStatus(String status) { this.status = status; }
     public void setTechnologies(List<String> technologies) { this.technologies = technologies; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
-
+    public Integer getOrderIndex() { return orderIndex; }
+    public void setOrderIndex(Integer orderIndex) { this.orderIndex = orderIndex; }
     @Override
     public String toString() {
         return "Project{" +
