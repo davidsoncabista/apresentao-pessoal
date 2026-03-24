@@ -438,7 +438,7 @@
             loadProjects();
         }
 
-        // --- ARTIGOS ---
+       // --- ARTIGOS ---
         async function loadArticles() {
             try {
                 const res = await fetch(`${API_BASE}/articles`);
@@ -449,6 +449,9 @@
                 data.forEach(a => {
                     const card = document.createElement('div');
                     card.className = 'card';
+                    card.dataset.id = a.id; // Guarda o ID para a ordenação
+                    card.style.cursor = 'grab'; // Mouse de mãozinha
+                    
                     card.innerHTML = `
                         <strong>${a.title}</strong>
                         <p style="font-size: 0.9rem; color: #aaa;">${a.summary || ''}</p>
@@ -459,9 +462,30 @@
                     `;
                     list.appendChild(card);
                 });
+
+                // Mágica do Drag and Drop para Artigos
+                new Sortable(list, {
+                    animation: 150,
+                    onEnd: async function () {
+                        const cards = list.children;
+                        const updates = [];
+                        for(let i=0; i<cards.length; i++) {
+                            updates.push({ id: parseInt(cards[i].dataset.id), orderIndex: i });
+                        }
+                        
+                        try {
+                            await fetch(`${API_BASE}/articles/reorder`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(updates)
+                            });
+                        } catch (e) {
+                            console.error('Erro ao reordenar artigos', e);
+                        }
+                    }
+                });
             } catch(e) { console.error("Erro ao carregar artigos", e); }
         }
-
         function openArticleModal(a = null) {
             document.getElementById('articleModal').style.display = 'block';
             if (a) {
