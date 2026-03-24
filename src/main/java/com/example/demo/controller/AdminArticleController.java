@@ -1,82 +1,124 @@
 package com.example.demo.controller;
 
+import com.example.demo.Article;
 import com.example.demo.entity.ArticleEntity;
 import com.example.demo.repository.ArticleRepository;
 import com.example.demo.service.ImageService;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin/api/articles")
 public class AdminArticleController {
 
-    private final ArticleRepository repository;
+    private final ArticleRepository articleRepo;
     private final ImageService imageService;
 
-    public AdminArticleController(ArticleRepository repository, ImageService imageService) {
-        this.repository = repository;
+    public AdminArticleController(ArticleRepository articleRepo, ImageService imageService) {
+        this.articleRepo = articleRepo;
         this.imageService = imageService;
     }
 
     @GetMapping
-    public List<ArticleEntity> list() {
-        return repository.findAll();
+    public List<Article> list() {
+        return articleRepo.findAllByOrderByOrderIndexAsc().stream()
+            .map(e -> {
+                Article a = new Article(e.getId(), e.getTitle(), e.getSummary(), e.getContentUrl(), e.getImageUrl());
+                a.setOrderIndex(e.getOrderIndex());
+                return a;
+            })
+            .collect(Collectors.toList());
     }
 
     @PostMapping(consumes = {"multipart/form-data"})
-    public ArticleEntity create(
-            @RequestPart("article") ArticleEntity article,
+    @CacheEvict(value = "articles", allEntries = true)
+    public ResponseEntity<Article> create(
+            @RequestPart("article") Article article,
             @RequestPart(value = "file", required = false) MultipartFile file) {
         
+        String urlFinal = article.getImageUrl();
         if (file != null && !file.isEmpty()) {
-            String imageUrl = imageService.uploadImage(file, "articles");
-            article.setImageUrl(imageUrl);
+            urlFinal = imageService.uploadImage(file, "articles");
         }
-        return repository.save(article);
+
+        ArticleEntity e = new ArticleEntity(article.getTitle(), article.getSummary(), article.getContentUrl(), urlFinal);
+        
+        if (article.getOrderIndex() != null) {
+            e.setOrderIndex(article.getOrderIndex());
+        }
+
+        articleRepo.save(e);
+        
+        Article resp = new Article(e.getId(), e.getTitle(), e.getSummary(), e.getContentUrl(), e.getImageUrl());
+        resp.setOrderIndex(e.getOrderIndex());
+        return ResponseEntity.created(URI.create("/admin/api/articles")).body(resp);
     }
 
     @PutMapping(value = "/{id}", consumes = {"multipart/form-data"})
-    public ResponseEntity<ArticleEntity> update(
+    @CacheEvict(value = "articles", allEntries = true)
+    public ResponseEntity<Article> update(
             @PathVariable Long id, 
-            @RequestPart("article") ArticleEntity novo,
+            @RequestPart("article") Article article,
             @RequestPart(value = "file", required = false) MultipartFile file) {
         
-        return repository.findById(id)
-            .map(artigoExistente -> {
-                if (file != null && !file.isEmpty()) {
-                    // Remove imagem antiga do MinIO se existir
-                    if (artigoExistente.getImageUrl() != null && !artigoExistente.getImageUrl().isEmpty()) {
-                        imageService.deleteImage(artigoExistente.getImageUrl());
-                    }
-                    // Sobe a nova imagem para a pasta 'articles'
-                    String novaUrl = imageService.uploadImage(file, "articles");
-                    artigoExistente.setImageUrl(novaUrl);
-                    System.out.println("Artigo atualizado - Nova imagem: " + novaUrl);
-                } else {
-                    // Mantém a URL atual caso não tenha subido novo arquivo
-                    artigoExistente.setImageUrl(novo.getImageUrl());
+        return articleRepo.findById(id).map(e -> {
+            if (file != null && !file.isEmpty()) {
+                if (e.getImageUrl() != null && !e.getImageUrl().isEmpty()) {
+                    imageService.deleteImage(e.getImageUrl());
                 }
-                
-                artigoExistente.setTitle(novo.getTitle());
-                artigoExistente.setSummary(novo.getSummary());
-                artigoExistente.setContentUrl(novo.getContentUrl());
-                return ResponseEntity.ok(repository.save(artigoExistente));
-            })
-            .orElse(ResponseEntity.notFound().build());
+                String novaUrl = imageService.uploadImage(file, "articles");
+                e.setImageUrl(novaUrl);
+            } else {
+                e.setImageUrl(article.getImageUrl());
+            }
+
+            e.setTitle(article.getTitle());
+            e.setSummary(article.getSummary());
+            e.setContentUrl(article.getContentUrl());
+            if (article.getOrderIndex() != null) {
+                e.setOrderIndex(article.getOrderIndex());
+            }
+            
+            articleRepo.save(e);
+            article.setId(id);
+            article.setOrderIndex(e.getOrderIndex());
+            return ResponseEntity.ok(article);
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(value = "articles", allEntries = true)
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        return repository.findById(id).map(artigo -> {
-            // Remove o arquivo do MinIO antes de deletar do banco
-            if (artigo.getImageUrl() != null && !artigo.getImageUrl().isEmpty()) {
-                imageService.deleteImage(artigo.getImageUrl());
+        return articleRepo.findById(id).map(a -> {
+            if (a.getImageUrl() != null && !a.getImageUrl().isEmpty()) {
+                imageService.deleteImage(a.getImageUrl());
             }
-            repository.deleteById(id);
+            articleRepo.deleteById(id);
             return ResponseEntity.noContent().<Void>build();
         }).orElse(ResponseEntity.notFound().build());
+    }
+
+    // --- ENDPOINT PARA REORDENAR ---
+    public static class OrderUpdate {
+        public Long id;
+        public Integer orderIndex;
+    }
+
+    @PutMapping("/reorder")
+    @CacheEvict(value = "articles", allEntries = true)
+    public ResponseEntity<Void> reorder(@RequestBody List<OrderUpdate> updates) {
+        for (OrderUpdate update : updates) {
+            articleRepo.findById(update.id).ifPresent(a -> {
+                a.setOrderIndex(update.orderIndex);
+                articleRepo.save(a);
+            });
+        }
+        return ResponseEntity.ok().build();
     }
 }

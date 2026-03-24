@@ -21,6 +21,8 @@ public class Article implements Serializable {
         this.imageUrl = imageUrl;
     }
 
+    private Integer orderIndex = 0;
+
     // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -44,4 +46,7 @@ public class Article implements Serializable {
                 ", title='" + title + '\'' +
                 '}';
     }
+
+    public Integer getOrderIndex() { return orderIndex; }
+    public void setOrderIndex(Integer orderIndex) { this.orderIndex = orderIndex; }
 }

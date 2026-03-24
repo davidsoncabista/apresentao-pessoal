@@ -21,6 +21,9 @@ public class ArticleEntity implements Serializable {
     private String imageUrl;
     private String contentUrl;
 
+    @Column(name = "ordem")
+    private Integer orderIndex = 0;
+
     public ArticleEntity() {}
 
     public ArticleEntity(String title, String summary, String imageUrl, String contentUrl) {
@@ -40,4 +43,6 @@ public class ArticleEntity implements Serializable {
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
     public String getContentUrl() { return contentUrl; }
     public void setContentUrl(String contentUrl) { this.contentUrl = contentUrl; }
+    public Integer getOrderIndex() { return orderIndex; }
+    public void setOrderIndex(Integer orderIndex) { this.orderIndex = orderIndex; }
 }

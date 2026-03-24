@@ -59,10 +59,15 @@ public class ContentService {
         }).collect(Collectors.toList());
     }
 
-    @Cacheable(value = "articles")
+   @Cacheable(value = "articles")
     public List<Article> getArticles() {
-        return articleRepo.findAll().stream()
-            .map(e -> new Article(e.getId(), e.getTitle(), e.getSummary(), e.getContentUrl(), e.getImageUrl()))
+        // Agora busca ordenado do banco
+        return articleRepo.findAllByOrderByOrderIndexAsc().stream()
+            .map(e -> {
+                Article a = new Article(e.getId(), e.getTitle(), e.getSummary(), e.getContentUrl(), e.getImageUrl());
+                a.setOrderIndex(e.getOrderIndex());
+                return a;
+            })
             .collect(Collectors.toList());
     }
 }
