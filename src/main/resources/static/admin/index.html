@@ -116,8 +116,10 @@
                 <input type="number" id="sProficiency" min="0" max="100" required>
                 
                 <label>Categoria:</label>
-                <input type="text" id="sCategory" placeholder="Ex: DevOps, Backend">
-                
+                <select id="sCategorySelect" onchange="toggleCategoryInput()" style="width: 100%; padding: 8px; margin-bottom: 5px; border-radius: 4px; border: 1px solid #ddd;">
+                    </select>
+                <input type="text" id="sCategoryInput" placeholder="Digite o nome da nova categoria..." style="display: none; width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
+
                 <label>Logo URL:</label>
                 <input type="url" id="sLogo">
                 
@@ -189,6 +191,7 @@
 
     <script>
         const API_BASE = '/admin/api';
+        let globalCategories = [];
 
         // --- NAVEGAÇÃO ---
         function showTab(tabId, btn) {
@@ -245,11 +248,19 @@
         }
 
         // --- SKILLS ---
+        function toggleCategoryInput() {
+            const val = document.getElementById('sCategorySelect').value;
+            document.getElementById('sCategoryInput').style.display = (val === 'NEW') ? 'block' : 'none';
+        }
+
         async function loadSkills() {
             const res = await fetch(`${API_BASE}/skills`);
             const data = await res.json();
             const list = document.getElementById('skillsList');
             list.innerHTML = '';
+
+            // Extrai categorias únicas dinamicamente
+            globalCategories = [...new Set(data.map(s => s.category).filter(Boolean))];
 
             data.forEach(skill => {
                 const card = document.createElement('div');
@@ -261,7 +272,7 @@
                     </div>
                     <p>${skill.category} - ${skill.proficiency}%</p>
                     <div class="card-actions">
-                        <button onclick='editSkill(${JSON.stringify(skill)})'>Editar</button>
+                        <button onclick='editSkill(${JSON.stringify(skill).replace(/'/g, "&apos;")})'>Editar</button>
                         <button onclick="deleteSkill(${skill.id})" class="danger">Excluir</button>
                     </div>
                 `;
@@ -271,15 +282,37 @@
 
         function openSkillModal(skill = null) {
             document.getElementById('skillModal').style.display = 'block';
+            
+            const sel = document.getElementById('sCategorySelect');
+            const inp = document.getElementById('sCategoryInput');
+            
+            // Popula o select com as categorias existentes
+            sel.innerHTML = '';
+            globalCategories.forEach(cat => {
+                sel.innerHTML += `<option value="${cat}">${cat}</option>`;
+            });
+            sel.innerHTML += `<option value="NEW">+ Adicionar Nova Categoria...</option>`;
+
             if (skill) {
                 document.getElementById('sId').value = skill.id || ''; 
                 document.getElementById('sName').value = skill.name;
                 document.getElementById('sProficiency').value = skill.proficiency;
-                document.getElementById('sCategory').value = skill.category;
                 document.getElementById('sLogo').value = skill.logo;
+                
+                // Verifica se a categoria da skill já existe na lista
+                if (globalCategories.includes(skill.category)) {
+                    sel.value = skill.category;
+                    inp.style.display = 'none';
+                } else {
+                    sel.value = 'NEW';
+                    inp.style.display = 'block';
+                    inp.value = skill.category;
+                }
             } else {
                 document.getElementById('skillForm').reset();
                 document.getElementById('sId').value = '';
+                sel.value = globalCategories.length > 0 ? globalCategories[0] : 'NEW';
+                inp.style.display = (sel.value === 'NEW') ? 'block' : 'none';
             }
         }
 
@@ -288,10 +321,18 @@
         async function saveSkill(e) {
             e.preventDefault();
             const id = document.getElementById('sId').value;
+            
+            // Define a categoria final (selecionada ou digitada)
+            let finalCategory = document.getElementById('sCategorySelect').value;
+            if (finalCategory === 'NEW') {
+                finalCategory = document.getElementById('sCategoryInput').value.trim();
+                if (!finalCategory) return alert("Por favor, digite o nome da nova categoria.");
+            }
+
             const body = {
                 name: document.getElementById('sName').value,
                 proficiency: parseInt(document.getElementById('sProficiency').value),
-                category: document.getElementById('sCategory').value,
+                category: finalCategory,
                 logo: document.getElementById('sLogo').value
             };
 
