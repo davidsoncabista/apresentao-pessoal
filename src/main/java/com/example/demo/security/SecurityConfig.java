@@ -66,7 +66,7 @@ public class SecurityConfig {
             "http://davidson.dev.br", 
             "https://davidson.dev.br",
             "https://portfolio-olive-rho.vercel.app",
-            "https://api2.davidson.dev.br",
+            "https://demoapi.davidson.dev.br",
             "http://localhost:3000",
             "https://api.davidson.dev.br"
         ));
