@@ -28,6 +28,10 @@ public class SecurityConfig {
     @Value("${app.admin.password}")
     private String adminPassword;
 
+    // ADICIONADO: Injeta a lista direto do arquivo de propriedades / env
+    @Value("${app.cors.allowed-origins}")
+    private java.util.List<String> allowedOrigins;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -61,15 +65,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         // URLs permitidas para acessar sua API
-        configuration.setAllowedOrigins(Arrays.asList(
-            "http://192.168.0.13:3000", 
-            "http://davidson.dev.br", 
-            "https://davidson.dev.br",
-            "https://portfolio-olive-rho.vercel.app",
-            "https://demoapi.davidson.dev.br",
-            "http://localhost:3000",
-            "https://api.davidson.dev.br"
-        ));
+        configuration.setAllowedOrigins(allowedOrigins);
+        
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         configuration.setAllowCredentials(true);
