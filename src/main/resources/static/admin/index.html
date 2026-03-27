@@ -432,6 +432,11 @@
             const id = document.getElementById('projId').value;
             const fileInput = document.getElementById('projFile');
             
+            // PEGA O VALOR CRU E LIMPA
+            const techsRaw = document.getElementById('projTechs').value;
+            // SE ESTIVER VAZIO, MANDA ARRAY VAZIO [], SE NÃO, DIVIDE E LIMPA
+            const techArray = techsRaw.trim() === "" ? [] : techsRaw.split(',').map(t => t.trim()).filter(t => t);
+
             const projectData = {
                 title: document.getElementById('projTitle').value,
                 description: document.getElementById('projDesc').value,
@@ -439,7 +444,7 @@
                 demoUrl: document.getElementById('projDemo').value,
                 status: document.getElementById('projStatus').value,
                 imageUrl: document.getElementById('projImage').value,
-                technologies: document.getElementById('projTechs').value.split(',').map(t => t.trim()).filter(t => t)
+                technologies: techArray // AGORA USA O ARRAY TRATADO
             };
 
             const formData = new FormData();
