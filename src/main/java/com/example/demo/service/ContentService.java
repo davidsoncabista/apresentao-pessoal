@@ -61,10 +61,9 @@ public class ContentService {
 
    @Cacheable(value = "articles")
     public List<Article> getArticles() {
-        // Agora busca ordenado do banco
         return articleRepo.findAllByOrderByOrderIndexAsc().stream()
             .map(e -> {
-                Article a = new Article(e.getId(), e.getTitle(), e.getSummary(), e.getContentUrl(), e.getImageUrl());
+                Article a = new Article(e.getId(), e.getTitle(), e.getTitleEn(), e.getSummary(), e.getSummaryEn(), e.getContentUrl(), e.getImageUrl());
                 a.setOrderIndex(e.getOrderIndex());
                 return a;
             })
