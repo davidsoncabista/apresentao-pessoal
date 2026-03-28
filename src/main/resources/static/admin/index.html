@@ -18,7 +18,7 @@
                 <button onclick="showTab('projects', this)" class="tab-btn">Projetos</button>
                 <button onclick="showTab('articles', this)" class="tab-btn">Artigos</button>
                 <button onclick="showTab('gallery', this)" class="tab-btn">Galeria</button>
-                                <button onclick="showTab('contact', this)" class="tab-btn">Contato</button>
+                <button onclick="showTab('contact', this)" class="tab-btn">Contato</button>
                 <a href="/" target="_blank" class="view-site-btn">Ver Site</a>
             </nav>
         </header>
@@ -33,13 +33,23 @@
                         <label>Nome:</label>
                         <input type="text" id="pName" required>
                     </div>
-                    <div class="form-group">
-                        <label>Título:</label>
-                        <input type="text" id="pTitle" required>
+                    <div class="form-group" style="display:flex; gap:10px;">
+                        <div style="flex:1;">
+                            <label>Título (PT):</label>
+                            <input type="text" id="pTitle" required>
+                        </div>
+                        <div style="flex:1;">
+                            <label>Título (EN):</label>
+                            <input type="text" id="pTitleEn">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label>Resumo:</label>
+                        <label>Resumo (PT):</label>
                         <textarea id="pSummary" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Resumo (EN):</label>
+                        <textarea id="pSummaryEn" rows="4"></textarea>
                     </div>
                     <div class="form-group">
                         <label>LinkedIn URL:</label>
@@ -96,10 +106,8 @@
             
             <section id="contact" class="tab-content">
                 <h2>Contato</h2>
-                <p>Aqui você pode configurar as informações de contato ou mensagens recebidas (futuro recurso).</p>
+                <p>Aqui você pode configurar as informações de contato ou mensagens recebidas.</p>
             </section>
-
-
         </main>
     </div>
 
@@ -109,21 +117,25 @@
             <h3 id="skillModalTitle">Adicionar/Editar Skill</h3>
             <form id="skillForm" onsubmit="saveSkill(event)">
                 <input type="hidden" id="sId">
-                <label>Nome:</label>
-                <input type="text" id="sName" required>
+                <div style="display:flex; gap:10px;">
+                    <div style="flex:1;"><label>Nome (PT):</label><input type="text" id="sName" required></div>
+                    <div style="flex:1;"><label>Nome (EN):</label><input type="text" id="sNameEn"></div>
+                </div>
                 
                 <label>Proficiência (0-100):</label>
                 <input type="number" id="sProficiency" min="0" max="100" required>
                 
-                <label>Categoria:</label>
-                <select id="sCategorySelect" onchange="toggleCategoryInput()" style="width: 100%; padding: 8px; margin-bottom: 5px; border-radius: 4px; border: 1px solid #ddd;">
-                    </select>
-                <input type="text" id="sCategoryInput" placeholder="Digite o nome da nova categoria..." style="display: none; width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
+                <label>Categoria (PT):</label>
+                <select id="sCategorySelect" onchange="toggleCategoryInput()" style="width: 100%; padding: 8px; margin-bottom: 5px; border-radius: 4px; border: 1px solid #ddd;"></select>
+                <input type="text" id="sCategoryInput" placeholder="Digite o nome da nova categoria em PT..." style="display: none; width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd; margin-bottom: 5px;">
+
+                <label>Categoria (EN):</label>
+                <input type="text" id="sCategoryEn" placeholder="Category in English">
 
                 <label>Logo URL:</label>
                 <input type="url" id="sLogo">
                 
-                <button type="submit" class="save-btn">Salvar</button>
+                <button type="submit" class="save-btn" style="margin-top: 10px;">Salvar</button>
             </form>
         </div>
     </div>
@@ -135,20 +147,26 @@
             <form id="projectForm" onsubmit="saveProject(event)">
                 <input type="hidden" id="projId">
                 
-                <label>Título:</label>
-                <input type="text" id="projTitle" required>
+                <div style="display:flex; gap:10px;">
+                    <div style="flex:1;"><label>Título (PT):</label><input type="text" id="projTitle" required></div>
+                    <div style="flex:1;"><label>Título (EN):</label><input type="text" id="projTitleEn"></div>
+                </div>
                 
-                <label>Descrição:</label>
+                <label>Descrição (PT):</label>
                 <textarea id="projDesc" rows="3" required></textarea>
                 
-                <label>Github URL:</label>
-                <input type="url" id="projGithub">
+                <label>Descrição (EN):</label>
+                <textarea id="projDescEn" rows="3"></textarea>
                 
-                <label>Demo URL:</label>
-                <input type="url" id="projDemo">
+                <div style="display:flex; gap:10px;">
+                    <div style="flex:1;"><label>Github URL:</label><input type="url" id="projGithub"></div>
+                    <div style="flex:1;"><label>Demo URL:</label><input type="url" id="projDemo"></div>
+                </div>
                 
-                <label>Status:</label>
-                <input type="text" id="projStatus" placeholder="Ex: Em Produção">
+                <div style="display:flex; gap:10px;">
+                    <div style="flex:1;"><label>Status (PT):</label><input type="text" id="projStatus" placeholder="Ex: Em Produção"></div>
+                    <div style="flex:1;"><label>Status (EN):</label><input type="text" id="projStatusEn" placeholder="Ex: In Production"></div>
+                </div>
                 
                 <label>Tecnologias (separadas por vírgula):</label>
                 <input type="text" id="projTechs" placeholder="Java, Spring Boot, Docker">
@@ -170,11 +188,16 @@
             <form id="articleForm" onsubmit="saveArticle(event)">
                 <input type="hidden" id="artId">
                 
-                <label>Título:</label>
-                <input type="text" id="artTitle" required>
+                <div style="display:flex; gap:10px;">
+                    <div style="flex:1;"><label>Título (PT):</label><input type="text" id="artTitle" required></div>
+                    <div style="flex:1;"><label>Título (EN):</label><input type="text" id="artTitleEn"></div>
+                </div>
                 
-                <label>Resumo:</label>
+                <label>Resumo (PT):</label>
                 <textarea id="artSummary" rows="3"></textarea>
+
+                <label>Resumo (EN):</label>
+                <textarea id="artSummaryEn" rows="3"></textarea>
                 
                 <label>Link do Artigo (URL):</label>
                 <input type="url" id="artUrl">
@@ -193,7 +216,6 @@
         const API_BASE = '/admin/api';
         let globalCategories = [];
 
-        // --- NAVEGAÇÃO ---
         function showTab(tabId, btn) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -213,12 +235,14 @@
                 const data = await res.json();
                 
                 document.getElementById('profileId').value = data.id || '';
-                document.getElementById('pName').value = data.name;
-                document.getElementById('pTitle').value = data.title;
-                document.getElementById('pSummary').value = data.summary;
-                document.getElementById('pLinkedin').value = data.linkedinUrl;
-                document.getElementById('pGithub').value = data.githubUrl;
-                document.getElementById('pYoutube').value = data.youtubeUrl;
+                document.getElementById('pName').value = data.name || '';
+                document.getElementById('pTitle').value = data.title || '';
+                document.getElementById('pTitleEn').value = data.titleEn || '';
+                document.getElementById('pSummary').value = data.summary || '';
+                document.getElementById('pSummaryEn').value = data.summaryEn || '';
+                document.getElementById('pLinkedin').value = data.linkedinUrl || '';
+                document.getElementById('pGithub').value = data.githubUrl || '';
+                document.getElementById('pYoutube').value = data.youtubeUrl || '';
             } catch (e) { console.error('Erro ao carregar perfil', e); }
         }
 
@@ -228,7 +252,9 @@
             const body = {
                 name: document.getElementById('pName').value,
                 title: document.getElementById('pTitle').value,
+                titleEn: document.getElementById('pTitleEn').value,
                 summary: document.getElementById('pSummary').value,
+                summaryEn: document.getElementById('pSummaryEn').value,
                 linkedinUrl: document.getElementById('pLinkedin').value,
                 githubUrl: document.getElementById('pGithub').value,
                 youtubeUrl: document.getElementById('pYoutube').value
@@ -259,7 +285,6 @@
             const list = document.getElementById('skillsList');
             list.innerHTML = '';
 
-            // Extrai categorias únicas dinamicamente
             globalCategories = [...new Set(data.map(s => s.category).filter(Boolean))];
 
             data.forEach(skill => {
@@ -286,7 +311,6 @@
             const sel = document.getElementById('sCategorySelect');
             const inp = document.getElementById('sCategoryInput');
             
-            // Popula o select com as categorias existentes
             sel.innerHTML = '';
             globalCategories.forEach(cat => {
                 sel.innerHTML += `<option value="${cat}">${cat}</option>`;
@@ -295,18 +319,19 @@
 
             if (skill) {
                 document.getElementById('sId').value = skill.id || ''; 
-                document.getElementById('sName').value = skill.name;
-                document.getElementById('sProficiency').value = skill.proficiency;
-                document.getElementById('sLogo').value = skill.logo;
+                document.getElementById('sName').value = skill.name || '';
+                document.getElementById('sNameEn').value = skill.nameEn || '';
+                document.getElementById('sProficiency').value = skill.proficiency || '';
+                document.getElementById('sCategoryEn').value = skill.categoryEn || '';
+                document.getElementById('sLogo').value = skill.logo || '';
                 
-                // Verifica se a categoria da skill já existe na lista
                 if (globalCategories.includes(skill.category)) {
                     sel.value = skill.category;
                     inp.style.display = 'none';
                 } else {
                     sel.value = 'NEW';
                     inp.style.display = 'block';
-                    inp.value = skill.category;
+                    inp.value = skill.category || '';
                 }
             } else {
                 document.getElementById('skillForm').reset();
@@ -322,7 +347,6 @@
             e.preventDefault();
             const id = document.getElementById('sId').value;
             
-            // Define a categoria final (selecionada ou digitada)
             let finalCategory = document.getElementById('sCategorySelect').value;
             if (finalCategory === 'NEW') {
                 finalCategory = document.getElementById('sCategoryInput').value.trim();
@@ -331,8 +355,10 @@
 
             const body = {
                 name: document.getElementById('sName').value,
+                nameEn: document.getElementById('sNameEn').value,
                 proficiency: parseInt(document.getElementById('sProficiency').value),
                 category: finalCategory,
+                categoryEn: document.getElementById('sCategoryEn').value,
                 logo: document.getElementById('sLogo').value
             };
 
@@ -350,13 +376,13 @@
         }
 
         async function deleteSkill(id) {
-            if (!id) return alert('ID não encontrado. Atualize o Java.');
+            if (!id) return alert('ID não encontrado.');
             if (!confirm('Tem certeza?')) return;
             await fetch(`${API_BASE}/skills/${id}`, { method: 'DELETE' });
             loadSkills();
         }
 
-        // --- PROJETOS (COM DRAG AND DROP) ---
+        // --- PROJETOS ---
         async function loadProjects() {
             const res = await fetch(`${API_BASE}/projects`);
             const data = await res.json();
@@ -366,12 +392,12 @@
             data.forEach(p => {
                 const card = document.createElement('div');
                 card.className = 'card';
-                card.dataset.id = p.id; // Guarda o ID para a ordenação
-                card.style.cursor = 'grab'; // Mouse de mãozinha
+                card.dataset.id = p.id;
+                card.style.cursor = 'grab';
                 
                 card.innerHTML = `
                     <strong>${p.title}</strong>
-                    <p class="status-badge">${p.status}</p>
+                    <p class="status-badge">${p.status || ''}</p>
                     <div class="card-actions">
                         <button onclick='editProject(${JSON.stringify(p).replace(/'/g, "&apos;")})'>Editar</button>
                         <button onclick="deleteProject(${p.id})" class="danger">Excluir</button>
@@ -380,27 +406,21 @@
                 list.appendChild(card);
             });
 
-            // Mágica do Drag and Drop
             new Sortable(list, {
                 animation: 150,
                 onEnd: async function () {
                     const cards = list.children;
                     const updates = [];
-                    // Varre os cards na nova ordem e cria o array de atualização
                     for(let i=0; i<cards.length; i++) {
                         updates.push({ id: parseInt(cards[i].dataset.id), orderIndex: i });
                     }
-                    
-                    // Envia silenciosamente para o Java salvar no banco
                     try {
                         await fetch(`${API_BASE}/projects/reorder`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(updates)
                         });
-                    } catch (e) {
-                        console.error('Erro ao reordenar', e);
-                    }
+                    } catch (e) { console.error('Erro ao reordenar', e); }
                 }
             });
         }
@@ -409,12 +429,15 @@
             document.getElementById('projectModal').style.display = 'block';
             if (p) {
                 document.getElementById('projId').value = p.id || '';
-                document.getElementById('projTitle').value = p.title;
-                document.getElementById('projDesc').value = p.description;
-                document.getElementById('projGithub').value = p.githubUrl;
-                document.getElementById('projDemo').value = p.demoUrl;
-                document.getElementById('projStatus').value = p.status;
-                document.getElementById('projImage').value = p.imageUrl;
+                document.getElementById('projTitle').value = p.title || '';
+                document.getElementById('projTitleEn').value = p.titleEn || '';
+                document.getElementById('projDesc').value = p.description || '';
+                document.getElementById('projDescEn').value = p.descriptionEn || '';
+                document.getElementById('projGithub').value = p.githubUrl || '';
+                document.getElementById('projDemo').value = p.demoUrl || '';
+                document.getElementById('projStatus').value = p.status || '';
+                document.getElementById('projStatusEn').value = p.statusEn || '';
+                document.getElementById('projImage').value = p.imageUrl || '';
                 document.getElementById('projTechs').value = p.technologies ? p.technologies.join(', ') : '';
                 document.getElementById('projCurrentImage').textContent = p.imageUrl ? 'Imagem atual: ' + p.imageUrl : 'Imagem atual: Nenhuma';
             } else {
@@ -432,19 +455,20 @@
             const id = document.getElementById('projId').value;
             const fileInput = document.getElementById('projFile');
             
-            // PEGA O VALOR CRU E LIMPA
             const techsRaw = document.getElementById('projTechs').value;
-            // SE ESTIVER VAZIO, MANDA ARRAY VAZIO [], SE NÃO, DIVIDE E LIMPA
             const techArray = techsRaw.trim() === "" ? [] : techsRaw.split(',').map(t => t.trim()).filter(t => t);
 
             const projectData = {
                 title: document.getElementById('projTitle').value,
+                titleEn: document.getElementById('projTitleEn').value,
                 description: document.getElementById('projDesc').value,
+                descriptionEn: document.getElementById('projDescEn').value,
                 githubUrl: document.getElementById('projGithub').value,
                 demoUrl: document.getElementById('projDemo').value,
                 status: document.getElementById('projStatus').value,
+                statusEn: document.getElementById('projStatusEn').value,
                 imageUrl: document.getElementById('projImage').value,
-                technologies: techArray // AGORA USA O ARRAY TRATADO
+                technologies: techArray
             };
 
             const formData = new FormData();
@@ -458,33 +482,24 @@
             const url = id ? `${API_BASE}/projects/${id}` : `${API_BASE}/projects`;
 
             try {
-                const res = await fetch(url, {
-                    method: method,
-                    body: formData
-                });
-
+                const res = await fetch(url, { method: method, body: formData });
                 if (res.ok) {
                     alert('Salvo com sucesso!');
                     closeModal('projectModal');
                     loadProjects();
                 } else {
-                    const errorText = await res.text();
-                    alert('Erro ao salvar: ' + errorText);
+                    alert('Erro ao salvar: ' + await res.text());
                 }
-            } catch (err) {
-                console.error(err);
-                alert('Erro de rede ou no servidor. Verifique o console.');
-            }
+            } catch (err) { alert('Erro de rede ou no servidor.'); }
         }
 
         async function deleteProject(id) {
-            if (!id) return alert('ID não encontrado. Atualize o Java.');
             if (!confirm('Apagar projeto?')) return;
             await fetch(`${API_BASE}/projects/${id}`, { method: 'DELETE' });
             loadProjects();
         }
 
-       // --- ARTIGOS ---
+        // --- ARTIGOS ---
         async function loadArticles() {
             try {
                 const res = await fetch(`${API_BASE}/articles`);
@@ -495,8 +510,8 @@
                 data.forEach(a => {
                     const card = document.createElement('div');
                     card.className = 'card';
-                    card.dataset.id = a.id; // Guarda o ID para a ordenação
-                    card.style.cursor = 'grab'; // Mouse de mãozinha
+                    card.dataset.id = a.id;
+                    card.style.cursor = 'grab';
                     
                     card.innerHTML = `
                         <strong>${a.title}</strong>
@@ -509,7 +524,6 @@
                     list.appendChild(card);
                 });
 
-                // Mágica do Drag and Drop para Artigos
                 new Sortable(list, {
                     animation: 150,
                     onEnd: async function () {
@@ -518,28 +532,28 @@
                         for(let i=0; i<cards.length; i++) {
                             updates.push({ id: parseInt(cards[i].dataset.id), orderIndex: i });
                         }
-                        
                         try {
                             await fetch(`${API_BASE}/articles/reorder`, {
                                 method: 'PUT',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(updates)
                             });
-                        } catch (e) {
-                            console.error('Erro ao reordenar artigos', e);
-                        }
+                        } catch (e) { console.error('Erro ao reordenar artigos', e); }
                     }
                 });
             } catch(e) { console.error("Erro ao carregar artigos", e); }
         }
+
         function openArticleModal(a = null) {
             document.getElementById('articleModal').style.display = 'block';
             if (a) {
                 document.getElementById('artId').value = a.id || '';
-                document.getElementById('artTitle').value = a.title;
-                document.getElementById('artSummary').value = a.summary;
-                document.getElementById('artUrl').value = a.contentUrl;
-                document.getElementById('artImage').value = a.imageUrl;
+                document.getElementById('artTitle').value = a.title || '';
+                document.getElementById('artTitleEn').value = a.titleEn || '';
+                document.getElementById('artSummary').value = a.summary || '';
+                document.getElementById('artSummaryEn').value = a.summaryEn || '';
+                document.getElementById('artUrl').value = a.contentUrl || '';
+                document.getElementById('artImage').value = a.imageUrl || '';
                 document.getElementById('artCurrentImage').textContent = a.imageUrl ? 'Imagem atual: ' + a.imageUrl : 'Imagem atual: Nenhuma';
             } else {
                 document.getElementById('articleForm').reset();
@@ -558,7 +572,9 @@
             
             const articleData = {
                 title: document.getElementById('artTitle').value,
+                titleEn: document.getElementById('artTitleEn').value,
                 summary: document.getElementById('artSummary').value,
+                summaryEn: document.getElementById('artSummaryEn').value,
                 contentUrl: document.getElementById('artUrl').value,
                 imageUrl: document.getElementById('artImage').value
             };
@@ -574,23 +590,15 @@
             const url = id ? `${API_BASE}/articles/${id}` : `${API_BASE}/articles`;
 
             try {
-                const res = await fetch(url, {
-                    method: method,
-                    body: formData
-                });
-
+                const res = await fetch(url, { method: method, body: formData });
                 if (res.ok) {
                     alert('Salvo com sucesso!');
                     closeModal('articleModal');
                     loadArticles();
                 } else {
-                    const errorText = await res.text();
-                    alert('Erro ao salvar: ' + errorText);
+                    alert('Erro ao salvar: ' + await res.text());
                 }
-            } catch (err) {
-                console.error(err);
-                alert('Erro de rede ou no servidor.');
-            }
+            } catch (err) { alert('Erro de rede ou no servidor.'); }
         }
 
         async function deleteArticle(id) {
@@ -631,36 +639,23 @@
             }
 
             try {
-                const res = await fetch('/api/gallery/upload', {
-                    method: 'POST',
-                    body: formData
-                });
-
+                const res = await fetch('/api/gallery/upload', { method: 'POST', body: formData });
                 if (res.ok) {
                     alert('Fotos enviadas com sucesso!');
                     loadGallery();
                 } else {
                     alert('Erro ao enviar fotos.');
                 }
-            } catch (err) {
-                console.error('Erro no upload', err);
-                alert('Erro de conexão ao enviar fotos.');
-            } finally {
-                fileInput.value = ''; 
-            }
+            } catch (err) { alert('Erro de conexão ao enviar fotos.'); } 
+            finally { fileInput.value = ''; }
         }
 
         async function deleteGalleryImage(url) {
             if (!confirm('Apagar esta foto permanentemente?')) return;
             try {
-                const res = await fetch(`/api/gallery/delete?url=${encodeURIComponent(url)}`, { 
-                    method: 'DELETE' 
-                });
-                if (res.ok) {
-                    loadGallery();
-                } else {
-                    alert('Erro ao apagar a foto.');
-                }
+                const res = await fetch(`/api/gallery/delete?url=${encodeURIComponent(url)}`, { method: 'DELETE' });
+                if (res.ok) loadGallery();
+                else alert('Erro ao apagar a foto.');
             } catch (err) { console.error(err); }
         }
 
