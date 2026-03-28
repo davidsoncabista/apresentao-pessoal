@@ -24,15 +24,15 @@ public class AdminSkillController {
 
     @GetMapping
     public List<Skill> list() {
-        return skillRepo.findAll().stream().map(e -> new Skill(e.getId(), e.getName(), e.getProficiency(), e.getCategory(), e.getLogo())).collect(Collectors.toList());
+        return skillRepo.findAll().stream().map(e -> new Skill(e.getId(), e.getName(), e.getNameEn(), e.getProficiency(), e.getCategory(), e.getCategoryEn(), e.getLogo())).collect(Collectors.toList());
     }
 
     @PostMapping
     @CacheEvict(value = "skills", allEntries = true)
     public ResponseEntity<Skill> create(@Valid @RequestBody Skill skill) {
-        SkillEntity e = new SkillEntity(skill.getName(), skill.getProficiency(), skill.getCategory(), skill.getLogo());
+        SkillEntity e = new SkillEntity(skill.getName(), skill.getNameEn(), skill.getProficiency(), skill.getCategory(), skill.getCategoryEn(), skill.getLogo());
         skillRepo.save(e);
-        Skill resp = new Skill(e.getId(), e.getName(), e.getProficiency(), e.getCategory(), e.getLogo());
+        Skill resp = new Skill(e.getId(), e.getName(), e.getNameEn(), e.getProficiency(), e.getCategory(), e.getCategoryEn(), e.getLogo());
         return ResponseEntity.created(URI.create("/admin/api/skills")).body(resp);
     }
 
@@ -41,8 +41,10 @@ public class AdminSkillController {
     public ResponseEntity<Skill> update(@PathVariable Long id, @Valid @RequestBody Skill skill) {
         return skillRepo.findById(id).map(e -> {
             e.setName(skill.getName());
+            e.setNameEn(skill.getNameEn());
             e.setProficiency(skill.getProficiency());
             e.setCategory(skill.getCategory());
+            e.setCategoryEn(skill.getCategoryEn());
             e.setLogo(skill.getLogo());
             skillRepo.save(e);
             skill.setId(id);

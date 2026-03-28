@@ -36,24 +36,23 @@ public class ContentService {
         List<ProfileEntity> list = profileRepo.findAll();
         if (list.isEmpty()) return defaultProfile;
         ProfileEntity e = list.get(0);
-        return new Profile(e.getId(), e.getName(), e.getTitle(), e.getSummary(), e.getLinkedinUrl(), e.getGithubUrl(), e.getYoutubeUrl());
+        return new Profile(e.getId(), e.getName(), e.getTitle(), e.getTitleEn(), e.getSummary(), e.getSummaryEn(), e.getLinkedinUrl(), e.getGithubUrl(), e.getYoutubeUrl());
     }
 
     @Cacheable(value = "skills")
     public List<Skill> getSkillsFallback(List<Skill> defaultSkills) {
         List<SkillEntity> list = skillRepo.findAll();
         if (list.isEmpty()) return defaultSkills;
-        return list.stream().map(e -> new Skill(e.getId(), e.getName(), e.getProficiency(), e.getCategory(), e.getLogo())).collect(Collectors.toList());
+        return list.stream().map(e -> new Skill(e.getId(), e.getName(), e.getNameEn(), e.getProficiency(), e.getCategory(), e.getCategoryEn(), e.getLogo())).collect(Collectors.toList());
     }
 
     @Cacheable(value = "projects")
     public List<Project> getProjectsFallback(List<Project> defaultProjects) {
-        // Usa o novo método de busca ordenada do banco!
         List<ProjectEntity> list = projectRepo.findAllByOrderByOrderIndexAsc();
         if (list.isEmpty()) return defaultProjects;
         
         return list.stream().map(e -> {
-            Project p = new Project(e.getId(), e.getTitle(), e.getDescription(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getTechnologies(), e.getImageUrl());
+            Project p = new Project(e.getId(), e.getTitle(), e.getTitleEn(), e.getDescription(), e.getDescriptionEn(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getStatusEn(), e.getTechnologies(), e.getImageUrl());
             p.setOrderIndex(e.getOrderIndex());
             return p;
         }).collect(Collectors.toList());

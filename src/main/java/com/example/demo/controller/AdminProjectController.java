@@ -28,10 +28,9 @@ public class AdminProjectController {
 
     @GetMapping
     public List<Project> list() {
-        // Usa o novo método ordenado
         return projectRepo.findAllByOrderByOrderIndexAsc().stream()
             .map(e -> {
-                Project p = new Project(e.getId(), e.getTitle(), e.getDescription(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getTechnologies(), e.getImageUrl());
+                Project p = new Project(e.getId(), e.getTitle(), e.getTitleEn(), e.getDescription(), e.getDescriptionEn(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getStatusEn(), e.getTechnologies(), e.getImageUrl());
                 p.setOrderIndex(e.getOrderIndex());
                 return p;
             })
@@ -49,7 +48,7 @@ public class AdminProjectController {
             urlFinal = imageService.uploadImage(file, "projects");
         }
 
-        ProjectEntity e = new ProjectEntity(project.getTitle(), project.getDescription(), project.getGithubUrl(), project.getDemoUrl(), project.getStatus(), project.getTechnologies(), urlFinal);
+        ProjectEntity e = new ProjectEntity(project.getTitle(), project.getTitleEn(), project.getDescription(), project.getDescriptionEn(), project.getGithubUrl(), project.getDemoUrl(), project.getStatus(), project.getStatusEn(), project.getTechnologies(), urlFinal);
         
         if (project.getOrderIndex() != null) {
             e.setOrderIndex(project.getOrderIndex());
@@ -57,7 +56,7 @@ public class AdminProjectController {
 
         projectRepo.save(e);
         
-        Project resp = new Project(e.getId(), e.getTitle(), e.getDescription(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getTechnologies(), e.getImageUrl());
+        Project resp = new Project(e.getId(), e.getTitle(), e.getTitleEn(), e.getDescription(), e.getDescriptionEn(), e.getGithubUrl(), e.getDemoUrl(), e.getStatus(), e.getStatusEn(), e.getTechnologies(), e.getImageUrl());
         resp.setOrderIndex(e.getOrderIndex());
         return ResponseEntity.created(URI.create("/admin/api/projects")).body(resp);
     }
@@ -81,10 +80,13 @@ public class AdminProjectController {
             }
 
             e.setTitle(project.getTitle());
+            e.setTitleEn(project.getTitleEn());
             e.setDescription(project.getDescription());
+            e.setDescriptionEn(project.getDescriptionEn());
             e.setGithubUrl(project.getGithubUrl());
             e.setDemoUrl(project.getDemoUrl());
             e.setStatus(project.getStatus());
+            e.setStatusEn(project.getStatusEn());
             e.setTechnologies(project.getTechnologies());
             if (project.getOrderIndex() != null) {
                 e.setOrderIndex(project.getOrderIndex());
@@ -109,7 +111,6 @@ public class AdminProjectController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
-    // --- CLASSE E ENDPOINT PARA REORDENAR ---
     public static class OrderUpdate {
         public Long id;
         public Integer orderIndex;

@@ -26,16 +26,16 @@ public class AdminProfileController {
         Optional<ProfileEntity> opt = profileRepo.findAll().stream().findFirst();
         if (opt.isEmpty()) return ResponseEntity.notFound().build();
         ProfileEntity e = opt.get();
-        Profile p = new Profile(e.getId(), e.getName(), e.getTitle(), e.getSummary(), e.getLinkedinUrl(), e.getGithubUrl(), e.getYoutubeUrl());
+        Profile p = new Profile(e.getId(), e.getName(), e.getTitle(), e.getTitleEn(), e.getSummary(), e.getSummaryEn(), e.getLinkedinUrl(), e.getGithubUrl(), e.getYoutubeUrl());
         return ResponseEntity.ok(p);
     }
 
     @PostMapping
     @CacheEvict(value = "profile", allEntries = true)
     public ResponseEntity<Profile> createProfile(@Valid @RequestBody Profile profile) {
-        ProfileEntity e = new ProfileEntity(profile.getName(), profile.getTitle(), profile.getSummary(), profile.getLinkedinUrl(), profile.getGithubUrl(), profile.getYoutubeUrl());
+        ProfileEntity e = new ProfileEntity(profile.getName(), profile.getTitle(), profile.getTitleEn(), profile.getSummary(), profile.getSummaryEn(), profile.getLinkedinUrl(), profile.getGithubUrl(), profile.getYoutubeUrl());
         profileRepo.save(e);
-        Profile resp = new Profile(e.getId(), e.getName(), e.getTitle(), e.getSummary(), e.getLinkedinUrl(), e.getGithubUrl(), e.getYoutubeUrl());
+        Profile resp = new Profile(e.getId(), e.getName(), e.getTitle(), e.getTitleEn(), e.getSummary(), e.getSummaryEn(), e.getLinkedinUrl(), e.getGithubUrl(), e.getYoutubeUrl());
         return ResponseEntity.created(URI.create("/admin/api/profile")).body(resp);
     }
 
@@ -45,7 +45,9 @@ public class AdminProfileController {
         return profileRepo.findById(id).map(e -> {
             e.setName(profile.getName());
             e.setTitle(profile.getTitle());
+            e.setTitleEn(profile.getTitleEn());
             e.setSummary(profile.getSummary());
+            e.setSummaryEn(profile.getSummaryEn());
             e.setLinkedinUrl(profile.getLinkedinUrl());
             e.setGithubUrl(profile.getGithubUrl());
             e.setYoutubeUrl(profile.getYoutubeUrl());
