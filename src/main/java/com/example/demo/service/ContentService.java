@@ -31,7 +31,7 @@ public class ContentService {
         this.articleRepo = articleRepo;
     }
     
-    @Cacheable(value = "profile")
+    @Cacheable(value = "profile", key = "'default'")
     public Profile getProfileFallback(Profile defaultProfile) {
         List<ProfileEntity> list = profileRepo.findAll();
         if (list.isEmpty()) return defaultProfile;
@@ -39,14 +39,14 @@ public class ContentService {
         return new Profile(e.getId(), e.getName(), e.getTitle(), e.getTitleEn(), e.getSummary(), e.getSummaryEn(), e.getLinkedinUrl(), e.getGithubUrl(), e.getYoutubeUrl());
     }
 
-    @Cacheable(value = "skills")
+    @Cacheable(value = "skills", key = "'default'")
     public List<Skill> getSkillsFallback(List<Skill> defaultSkills) {
         List<SkillEntity> list = skillRepo.findAll();
         if (list.isEmpty()) return defaultSkills;
         return list.stream().map(e -> new Skill(e.getId(), e.getName(), e.getNameEn(), e.getProficiency(), e.getCategory(), e.getCategoryEn(), e.getLogo())).collect(Collectors.toList());
     }
 
-    @Cacheable(value = "projects")
+    @Cacheable(value = "projects", key = "'default'")
     public List<Project> getProjectsFallback(List<Project> defaultProjects) {
         List<ProjectEntity> list = projectRepo.findAllByOrderByOrderIndexAsc();
         if (list.isEmpty()) return defaultProjects;
@@ -58,7 +58,7 @@ public class ContentService {
         }).collect(Collectors.toList());
     }
 
-   @Cacheable(value = "articles")
+   @Cacheable(value = "articles", key = "'default'")
     public List<Article> getArticles() {
         return articleRepo.findAllByOrderByOrderIndexAsc().stream()
             .map(e -> {
