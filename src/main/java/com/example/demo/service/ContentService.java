@@ -31,7 +31,6 @@ public class ContentService {
         this.articleRepo = articleRepo;
     }
     
-    // CORREÇÃO AQUI: Adicionado key = "'default'"
     @Cacheable(value = "profile", key = "'default'")
     public Profile getProfileFallback(Profile defaultProfile) {
         List<ProfileEntity> list = profileRepo.findAll();
@@ -40,7 +39,6 @@ public class ContentService {
         return new Profile(e.getId(), e.getName(), e.getTitle(), e.getTitleEn(), e.getSummary(), e.getSummaryEn(), e.getLinkedinUrl(), e.getGithubUrl(), e.getYoutubeUrl());
     }
 
-    // CORREÇÃO AQUI: Adicionado key = "'default'"
     @Cacheable(value = "skills", key = "'default'")
     public List<Skill> getSkillsFallback(List<Skill> defaultSkills) {
         List<SkillEntity> list = skillRepo.findAll();
@@ -48,7 +46,6 @@ public class ContentService {
         return list.stream().map(e -> new Skill(e.getId(), e.getName(), e.getNameEn(), e.getProficiency(), e.getCategory(), e.getCategoryEn(), e.getLogo())).collect(Collectors.toList());
     }
 
-    // CORREÇÃO AQUI: Adicionado key = "'default'"
     @Cacheable(value = "projects", key = "'default'")
     public List<Project> getProjectsFallback(List<Project> defaultProjects) {
         List<ProjectEntity> list = projectRepo.findAllByOrderByOrderIndexAsc();
@@ -61,7 +58,6 @@ public class ContentService {
         }).collect(Collectors.toList());
     }
 
-   // CORREÇÃO AQUI: Adicionado key = "'default'"
    @Cacheable(value = "articles", key = "'default'")
     public List<Article> getArticles() {
         return articleRepo.findAllByOrderByOrderIndexAsc().stream()
