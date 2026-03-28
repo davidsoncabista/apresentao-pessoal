@@ -16,9 +16,13 @@ public class ProfileEntity implements Serializable {
 
     private String name;
     private String title;
+    private String titleEn;
 
     @Column(columnDefinition = "TEXT")
     private String summary;
+    
+    @Column(columnDefinition = "TEXT")
+    private String summaryEn;
 
     private String linkedinUrl;
     private String githubUrl;
@@ -28,10 +32,12 @@ public class ProfileEntity implements Serializable {
 
     public ProfileEntity() {}
 
-    public ProfileEntity(String name, String title, String summary, String linkedinUrl, String githubUrl, String youtubeUrl) {
+    public ProfileEntity(String name, String title, String titleEn, String summary, String summaryEn, String linkedinUrl, String githubUrl, String youtubeUrl) {
         this.name = name;
         this.title = title;
+        this.titleEn = titleEn;
         this.summary = summary;
+        this.summaryEn = summaryEn;
         this.linkedinUrl = linkedinUrl;
         this.githubUrl = githubUrl;
         this.youtubeUrl = youtubeUrl;
@@ -44,8 +50,12 @@ public class ProfileEntity implements Serializable {
     public void setName(String name) { this.name = name; }
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
+    public String getTitleEn() { return titleEn; }
+    public void setTitleEn(String titleEn) { this.titleEn = titleEn; }
     public String getSummary() { return summary; }
     public void setSummary(String summary) { this.summary = summary; }
+    public String getSummaryEn() { return summaryEn; }
+    public void setSummaryEn(String summaryEn) { this.summaryEn = summaryEn; }
     public String getLinkedinUrl() { return linkedinUrl; }
     public void setLinkedinUrl(String linkedinUrl) { this.linkedinUrl = linkedinUrl; }
     public String getGithubUrl() { return githubUrl; }
