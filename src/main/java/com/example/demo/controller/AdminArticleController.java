@@ -29,7 +29,8 @@ public class AdminArticleController {
     public List<Article> list() {
         return articleRepo.findAllByOrderByOrderIndexAsc().stream()
             .map(e -> {
-                Article a = new Article(e.getId(), e.getTitle(), e.getSummary(), e.getContentUrl(), e.getImageUrl());
+                // CORRIGIDO: Passando titleEn e summaryEn
+                Article a = new Article(e.getId(), e.getTitle(), e.getTitleEn(), e.getSummary(), e.getSummaryEn(), e.getContentUrl(), e.getImageUrl());
                 a.setOrderIndex(e.getOrderIndex());
                 return a;
             })
@@ -47,7 +48,8 @@ public class AdminArticleController {
             urlFinal = imageService.uploadImage(file, "articles");
         }
 
-        ArticleEntity e = new ArticleEntity(article.getTitle(), article.getSummary(), article.getContentUrl(), urlFinal);
+        // CORRIGIDO: Passando titleEn e summaryEn
+        ArticleEntity e = new ArticleEntity(article.getTitle(), article.getTitleEn(), article.getSummary(), article.getSummaryEn(), urlFinal, article.getContentUrl());
         
         if (article.getOrderIndex() != null) {
             e.setOrderIndex(article.getOrderIndex());
@@ -55,7 +57,8 @@ public class AdminArticleController {
 
         articleRepo.save(e);
         
-        Article resp = new Article(e.getId(), e.getTitle(), e.getSummary(), e.getContentUrl(), e.getImageUrl());
+        // CORRIGIDO: Passando titleEn e summaryEn
+        Article resp = new Article(e.getId(), e.getTitle(), e.getTitleEn(), e.getSummary(), e.getSummaryEn(), e.getContentUrl(), e.getImageUrl());
         resp.setOrderIndex(e.getOrderIndex());
         return ResponseEntity.created(URI.create("/admin/api/articles")).body(resp);
     }
@@ -79,7 +82,9 @@ public class AdminArticleController {
             }
 
             e.setTitle(article.getTitle());
+            e.setTitleEn(article.getTitleEn()); // CORRIGIDO
             e.setSummary(article.getSummary());
+            e.setSummaryEn(article.getSummaryEn()); // CORRIGIDO
             e.setContentUrl(article.getContentUrl());
             if (article.getOrderIndex() != null) {
                 e.setOrderIndex(article.getOrderIndex());
